@@ -1,0 +1,53 @@
+import tkinter as tk
+import constants as c
+from Reusable_Code.Rounded_Items.rounded_cards import Rounded_Card
+
+#Class that can be imported to add a frame of cards for fixtures onto the screen
+class fixture_cards(tk.Frame):
+    def __init__(self, parent, fixtures, want_colour_change_background, on_click):
+        super().__init__(parent, background=c.LIGHT_BACKGROUND)
+        self.pack(fill="x")
+        
+        self.on_click = on_click
+        
+        #Loop to go through every fixture and create its card
+        for fixture in fixtures:
+            if (want_colour_change_background):
+                if fixture["is_selected"] == True:
+                    self.create_card_frame(fixture, c.LIGHT_SUCCESS, c.LIGHT_SUCCESS_HOVER)
+                else:
+                    self.create_card_frame(fixture, c.LIGHT_SIDEBAR, c.LIGHT_SIDEBAR_HOVER)
+            else:
+                self.create_card_frame(fixture, c.LIGHT_SIDEBAR, c.LIGHT_SIDEBAR_HOVER)
+            
+    
+    #Method to create a fixture card            
+    def create_card_frame(self, fixture, bg_colour, hover_colour):
+        top_sentence = f"{fixture['opposition']} ({fixture['home_away']})"
+        bottom_sentence = f"Date: {fixture['date']}"
+        
+        card = Rounded_Card(self, width=500, height=70, radius=16, bg_colour=bg_colour, parent_bg_colour=c.LIGHT_BACKGROUND, hover_colour=hover_colour)
+        card.pack(fill="x", padx=10, pady=5)
+        
+        lbl_top = tk.Label(card.content, text=top_sentence, font=c.FONT_LABEL, bg=bg_colour, fg="black")
+        lbl_top.pack()
+        
+        lbl_bottom = tk.Label(card.content, text=bottom_sentence, font=c.FONT_LABEL, bg=bg_colour, fg="black")
+        lbl_bottom.pack()
+        
+        #Bind click and hover to whole card, recursively doing it to all child widgets
+        self.bind_click(card, lambda f=fixture: self.on_click(f))
+        self.bind_hover(card, card.bg_colour, card.hover_colour)
+        
+    
+    #Method to give a card the ability to be clicked 
+    def bind_click(self, widget, command):
+        widget.bind("<Button-1>", lambda e: command())
+        for child in widget.winfo_children():
+            self.bind_click(child, command)
+            
+    
+    #Method to changed the bg colour of a card when its being hovered over
+    def bind_hover(self, card, bg_colour, hover_colour):
+        card.canvas.bind("<Enter>", lambda e: card.set_colour(hover_colour))
+        card.canvas.bind("<Leave>", lambda e: card.set_colour(bg_colour))
