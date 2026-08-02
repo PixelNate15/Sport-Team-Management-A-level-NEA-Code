@@ -10,6 +10,7 @@ from Member.member_expanded_fixture_card import Member_Expanded_Fixture_Card
 from Captain.main_screen_captain import Main_Screen_Captain
 
 
+
 class App (tk.Tk):
     def __init__(self):
         super().__init__() #Inhert from the tkinter module
