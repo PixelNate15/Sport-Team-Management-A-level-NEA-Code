@@ -6,7 +6,7 @@ from Reusable_Code.Rounded_Items.rounded_button import Rounded_Button
 import tkinter as tk
 
 
-class Member_Expanded_Fixture_Card(tk.Frame):
+class Member_Expanded_Fixture_Card_Screen(tk.Frame):
     def __init__(self, parent, app, user_id, fixture):
         super().__init__(parent, bg=c.LIGHT_BACKGROUND)
         self.app = app

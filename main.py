@@ -1,14 +1,14 @@
 import tkinter as tk
+from Member.member_show_selected_fixtures_screen import Member_Show_Selected_Fixtures_Screen
 import constants as c
 from SQL import check_is_captain
 from login_screen import Login_Screen
 from create_account import Create_Account_Screen
-from Member.main_screen_member import Main_Screen_Member
+from Member.member_main_screen import Member_Main_Screen
 from Member.member_availability_screen import Member_Availability_Screen
 from Member.member_select_availability_screen import Member_Select_Availability_Screen
-from Member.member_expanded_fixture_card import Member_Expanded_Fixture_Card
+from Member.member_expanded_fixture_card_screen import Member_Expanded_Fixture_Card_Screen
 from Captain.main_screen_captain import Main_Screen_Captain
-
 
 
 class App (tk.Tk):
@@ -53,7 +53,7 @@ class App (tk.Tk):
         self.is_captain = check_is_captain(user_id)
 
         if self.is_captain == False:
-            self.current_frame = Main_Screen_Member(self, self, user_id)
+            self.current_frame = Member_Main_Screen(self, self, user_id)
             self.current_frame.pack(fill="both", expand="true")
         else:
             self.current_frame = Main_Screen_Captain(self, self, user_id)
@@ -84,7 +84,16 @@ class App (tk.Tk):
         self.clear_screen()
         self.geometry("550x650")
         
-        self.current_frame = Member_Expanded_Fixture_Card(self, self, user_id, fixture)
+        self.current_frame = Member_Expanded_Fixture_Card_Screen(self, self, user_id, fixture)
+        self.current_frame.pack(fill="both", expand="true")
+        
+        
+    #Method to show the view selected fixtures screen
+    def show_selected_fixtures(self, user_id, fixtures):
+        self.clear_screen()
+        self.geometry("550x650")
+        
+        self.current_frame = Member_Show_Selected_Fixtures_Screen(self, self, user_id, fixtures)
         self.current_frame.pack(fill="both", expand="true")
         
 

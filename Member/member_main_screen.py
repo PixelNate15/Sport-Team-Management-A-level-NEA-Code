@@ -5,7 +5,7 @@ from Reusable_Code.fixture_cards import fixture_cards
 from SQL import get_fixtures
 import tkinter as tk
 
-class Main_Screen_Member(tk.Frame):
+class Member_Main_Screen(tk.Frame):
     def __init__(self, parent, app, user_id):
         super().__init__(parent, bg=c.LIGHT_BACKGROUND)
         self.app = app
@@ -50,7 +50,7 @@ class Main_Screen_Member(tk.Frame):
         pass
 
     def open_selected_fixtures(self):
-        pass
+        self.app.show_selected_fixtures(self.user_id, self.fixtures)
 
     def open_partner_feedback(self):
         pass
