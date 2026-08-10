@@ -37,5 +37,5 @@ class Member_Show_Selected_Fixtures_Screen(tk.Frame):
         
         
     #Method to return to login screen
-    def return_to_login_screen(self):
+    def return_to_main_screen(self):
         self.app.show_main_screen(self.user_id)
