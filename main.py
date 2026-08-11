@@ -8,6 +8,7 @@ from Member.member_main_screen import Member_Main_Screen
 from Member.member_availability_screen import Member_Availability_Screen
 from Member.member_select_availability_screen import Member_Select_Availability_Screen
 from Member.member_expanded_fixture_card_screen import Member_Expanded_Fixture_Card_Screen
+from Member.member_show_recent_results_screen import Member_Show_Recent_Results
 from Captain.main_screen_captain import Main_Screen_Captain
 
 
@@ -94,6 +95,15 @@ class App (tk.Tk):
         self.geometry("550x650")
         
         self.current_frame = Member_Show_Selected_Fixtures_Screen(self, self, user_id, fixtures)
+        self.current_frame.pack(fill="both", expand="true")
+        
+    
+    #Method to show the recent results for a member
+    def show_recent_results(self, user_id):
+        self.clear_screen()
+        self.geometry("550x715")
+        
+        self.current_frame = Member_Show_Recent_Results(self, self, user_id)
         self.current_frame.pack(fill="both", expand="true")
         
 

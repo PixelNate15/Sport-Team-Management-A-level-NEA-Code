@@ -56,4 +56,4 @@ class Member_Main_Screen(tk.Frame):
         pass
 
     def open_recent_results(self):
-        pass
+        self.app.show_recent_results(self.user_id)

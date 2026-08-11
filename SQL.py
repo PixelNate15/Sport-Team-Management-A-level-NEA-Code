@@ -234,3 +234,51 @@ def get_players_for_fixture(fixture_id: int) -> list[dict]:
         })
     
     return players
+
+
+#Function to get the results for a fixture - requires user_id
+def get_result_of_fixture_for_one_user(user_id: int) -> list[dict]:
+    connection = connect_database()
+    cursor = connection.cursor()
+    
+    sql = """
+        SELECT f.fixture_id, f.opponent_name, f.date, f.start_time, f.location, f.is_home, f.division, f.notes, m.match_id, m.pair_number, m.did_win, m.sets_won, m.sets_lost, m.games_won, m.games_lost
+        FROM fixture f
+        JOIN squad_players sp ON sp.squad_id = f.squad_id
+        JOIN `match` m ON m.fixture_id = f.fixture_id
+        JOIN match_players mp ON mp.match_id = m.match_id
+        JOIN user u ON u.user_id = mp.user_id
+        WHERE sp.user_id = %s AND mp.user_id = %s AND f.date >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH) AND f.date <= CURDATE()
+        GROUP BY m.match_id
+        ORDER BY f.date DESC, m.pair_number
+    """
+    
+    values = (user_id, user_id)
+    
+    cursor.execute(sql, values)
+    SQL_results = cursor.fetchall()
+        
+    cursor.close()
+    connection.close()
+    
+    results = []
+    for row in SQL_results:
+        results.append({
+            "fixture_id" : row[0],
+            "opposition" : row[1],
+            "date" : row[2].strftime("%d/%m/%Y"),
+            "start_time" : format_time(row[3]),
+            "location" : row[4],
+            "home_away" : ("Home" if row[5] else "Away"),
+            "division" : row[6],
+            "notes" : row[7],
+            "match_id" : row[8],
+            "pair_number" : row[9],
+            "did_win" : bool(row[10]),
+            "sets_won" : row[11],
+            "sets_lost" : row[12],
+            "games_won" : row[13],
+            "games_lost" : row[14]
+        })
+    
+    return results
