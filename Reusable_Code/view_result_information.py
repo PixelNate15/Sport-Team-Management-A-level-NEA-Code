@@ -1,20 +1,19 @@
 import constants as c
 import tkinter as tk
 
-class View_Fixture_Details(tk.Frame):
-    def __init__(self, parent, fixture):
+class View_Result_Details(tk.Frame):
+    def __init__(self, parent, result):
         super().__init__(parent, bg=c.LIGHT_BACKGROUND)
-        self.fixture = fixture
+        self.result = result
     
         
         rows = [
-            ("Opposition", self.fixture["opposition"]),
-            ("Date", self.fixture["date"]),
-            ("Start Time", self.fixture["start_time"]),
-            ("Location", self.fixture["location"]),
-            ("Home/Away", self.fixture["home_away"]),
-            ("Division", self.fixture["division"]),
-            ("Notes", self.fixture["notes"])
+            ("Result", (f"{self.result["sets_won"]} - {self.result["sets_lost"]} ")),
+            ("Opposition", self.result["opposition"]),
+            ("Date", self.result["date"]),
+            ("Home/Away", self.result["home_away"]),
+            ("Division", self.result["division"]),
+            ("Notes", self.result["notes"]),
         ]
         
         #Loop creating a "grid" of labels from rows

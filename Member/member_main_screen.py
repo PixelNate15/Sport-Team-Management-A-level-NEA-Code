@@ -46,14 +46,18 @@ class Member_Main_Screen(tk.Frame):
     def expand_card(self, fixture):
         self.app.show_expanded_fixture(self.user_id, fixture)
 
+
     def open_injury_status(self):
         pass
+
 
     def open_selected_fixtures(self):
         self.app.show_selected_fixtures(self.user_id, self.fixtures)
 
+
     def open_partner_feedback(self):
         pass
+
 
     def open_recent_results(self):
         self.app.show_recent_results(self.user_id)

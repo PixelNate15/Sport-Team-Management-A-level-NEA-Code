@@ -25,8 +25,17 @@ class Member_Show_Recent_Results(tk.Frame):
         self.results_frame = result_cards(self, self.results, self.expand_card)
         self.results_frame.pack()
         
+        #Put back button onto the screen
+        self.btn_back = Rounded_Button(self, text="Back", command=self.return_to_main_screen, font=c.FONT_BUTTON, bg_colour=c.LIGHT_PRIMARY_ACCENT, hover_colour=c.LIGHT_ACCENT_HOVER, fg_colour="white", width=170, height=42, radius=16, parent_bg=c.LIGHT_BACKGROUND)
+        self.btn_back.pack(pady=15)
+        
         
     #Method to expand a result card
-    def expand_card(self):
-        pass
+    def expand_card(self, result):
+        self.app.show_expanded_result(self.user_id, result)
+        
+
+    #Method to return to login screen
+    def return_to_main_screen(self):
+        self.app.show_main_screen(self.user_id)
     
