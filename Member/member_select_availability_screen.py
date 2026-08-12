@@ -23,7 +23,6 @@ class Member_Select_Availability_Screen(tk.Frame):
         self.lbl_Title = tk.Label(self, text=self.title_string, font=c.FONT_HEADING, fg=c.LIGHT_MAIN_TEXT, bg=c.LIGHT_BACKGROUND, justify="center")
         self.lbl_Title.pack(anchor="center", padx=(10,0), pady=10)
         
-        
         #Create a tick box
         self.is_available = IntVar(value=1)
         self.bx_is_available = Checkbutton(self, text="Are you available?", variable=self.is_available, onvalue=1, offvalue=0, height=3, width=0, bg=c.LIGHT_BACKGROUND, font=c.FONT_LABEL, activebackground=c.LIGHT_BACKGROUND, command=self.toggle_reason_field)

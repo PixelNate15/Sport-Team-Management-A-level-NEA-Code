@@ -19,9 +19,10 @@ class Member_Main_Screen(tk.Frame):
         self.buttons = [
             ("Manage Availability", self.open_availability),
             ("Manage Injury Status", self.open_injury_status),
-            ("View Selected Fixture", self.open_selected_fixtures),
-            ("Partner Feedback", self.open_partner_feedback),
-            ("Open Recent Results", self.open_recent_results)
+            ("Selected Fixture", self.open_selected_fixtures),
+            ("Open Partner Feedback", self.open_recent_partner_feedback),
+            ("Give Partner Feedback", self.open_give_partner_feedback),
+            ("Recent Results", self.open_recent_results)
         ]
         #Put sidebar on screen
         self.sidebar = main_screen_sidebar(self, self.buttons)
@@ -55,7 +56,10 @@ class Member_Main_Screen(tk.Frame):
         self.app.show_selected_fixtures(self.user_id, self.fixtures)
 
 
-    def open_partner_feedback(self):
+    def open_recent_partner_feedback(self):
+        self.app.show_recent_partner_feedback(self.user_id)
+        
+    def open_give_partner_feedback(self):
         pass
 
 

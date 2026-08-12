@@ -283,7 +283,7 @@ def get_result_of_fixture_for_one_user(user_id: int) -> list[dict]:
 
 
 #Function to get partner feedback for one fixture - requires fixture_id and user_id
-def get_partner_feedback(fixture_id: int, user_id: int) -> list[dict]:
+def get_partner_feedback_for_one_fixture(fixture_id: int, user_id: int) -> list[dict]:
     connection = connect_database()
     cursor = connection.cursor()
     
@@ -316,3 +316,44 @@ def get_partner_feedback(fixture_id: int, user_id: int) -> list[dict]:
         })
         
     return feedback
+
+
+#Function to get recent partner feedback for one user - requires user_id
+def get_recent_partner_feedback(user_id: int) -> list[dict]:
+    connection = connect_database()
+    cursor = connection.cursor()
+    
+    sql = """
+    SELECT f.opponent_name, f.date, f.is_home, pf.overall_rating, pf.key_moments_rating, pf.communication_rating, pf.comments
+    FROM  partner_feedback pf
+    JOIN `match` m ON m.match_id = pf.match_id
+    JOIN fixture f ON f.fixture_id = m.fixture_id
+    WHERE pf.reviewed_id = %s
+    AND f.date >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)
+    AND f.date <= CURDATE()
+    ORDER BY f.date DESC
+    """
+    
+    value = (user_id,)
+
+    cursor.execute(sql, value)
+    results = cursor.fetchall()
+
+    cursor.close()
+    connection.close()
+    
+    feedback = []
+    for row in results:
+        feedback.append({
+            "opposition" : row[0],
+            "date" : row[1].strftime("%d/%m/%Y"),
+            "home_away" : ("Home" if row[2] else "Away"),
+            "overall_rating" : row[3],
+            "key_moments_rating" : row[4],
+            "communication_rating" : row[5],
+            "comments" : row[6]
+        })
+        
+    return feedback
+
+
