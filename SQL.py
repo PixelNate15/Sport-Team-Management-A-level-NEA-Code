@@ -357,3 +357,73 @@ def get_recent_partner_feedback(user_id: int) -> list[dict]:
     return feedback
 
 
+#Function to get see if a user has submitted partner feedback - requires fixture_id and user_id
+def has_submitted_feedback(fixture_id: int, user_id: int) -> bool:
+    connection = connect_database()
+    cursor = connection.cursor()
+    
+    sql = """
+    SELECT pf.overall_rating
+    FROM  partner_feedback pf
+    JOIN `match` m ON m.match_id = pf.match_id
+    WHERE m.fixture_id = %s AND pf.reviewer_id = %s
+    """
+    
+    values = (fixture_id, user_id)
+
+    cursor.execute(sql, values)
+    results = cursor.fetchone()
+
+    cursor.close()
+    connection.close()
+    
+    return results is not None
+
+
+#Function to get the name of a partner for a fixture - requires user_id and match_id
+def get_partner_info(user_id: int, match_id: int) -> list[dict]:
+    connection = connect_database()
+    cursor = connection.cursor()
+    
+    sql = """
+    SELECT u.first_name, u.surname, u.user_id
+    FROM match_players mp
+    JOIN user u ON u.user_id = mp.partner_user_id
+    WHERE mp.match_id = %s AND mp.user_id = %s
+    """
+    
+    values = (match_id, user_id)
+
+    cursor.execute(sql, values)
+    result = cursor.fetchone()
+
+    cursor.close()
+    connection.close()
+    
+    partner_info = {
+        "firstname": result[0],
+        "surname": result[1],
+        "user_id": result[2]
+    }
+    return partner_info
+
+
+#Function to insert partner feedback for a fixture
+def insert_partner_feedback(match_id: int, reviewer_id: int, reviewed_id: int, overall_rating: int, key_moments_rating: int, communication_rating: int, comments: str):
+    connection = connect_database()
+    cursor = connection.cursor()
+    
+    sql = """
+    INSERT INTO partner_feedback
+    (match_id, reviewer_id, reviewed_id, overall_rating, key_moments_rating, communication_rating, comments, date)
+    VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+    """
+    
+    values = (match_id, reviewer_id, reviewed_id, overall_rating, key_moments_rating, communication_rating, comments, date.today())
+
+    print(sql.count("%s"), len(values))
+    cursor.execute(sql, values)
+    connection.commit()
+
+    cursor.close()
+    connection.close()

@@ -16,7 +16,7 @@ class Member_Recent_Partner_Feedback(tk.Frame):
         self.header = Header_Panel(self)
         self.header.pack(side="top", fill="x")
         
-        #Label to put the partnerfeedback they recieved for that match
+        #Label to put the partner feedback they recieved for that match
         self.lbl_partnerfeedback = tk.Label(self, text="Partner Feedback", font=c.FONT_HEADING, fg=c.LIGHT_MAIN_TEXT, bg=c.LIGHT_BACKGROUND, justify="right")
         self.lbl_partnerfeedback.pack(pady=(10,0))
         

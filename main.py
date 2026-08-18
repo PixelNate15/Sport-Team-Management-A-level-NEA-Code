@@ -11,6 +11,8 @@ from Member.member_expanded_fixture_card_screen import Member_Expanded_Fixture_C
 from Member.member_show_recent_results_screen import Member_Show_Recent_Results
 from Member.member_expanded_result_card_screen import Member_Expanded_Result_Card_Screen
 from Member.member_show_recent_partner_feedback import Member_Recent_Partner_Feedback
+from Member.member_show_required_partner_feedback_screen import Member_Show_Required_Partner_Feedback
+from Member.member_submit_feedback import Member_Sumbit_Feedback
 from Captain.main_screen_captain import Main_Screen_Captain
 
 
@@ -124,6 +126,24 @@ class App (tk.Tk):
         self.geometry("550x650")
         
         self.current_frame = Member_Recent_Partner_Feedback(self, self, user_id)
+        self.current_frame.pack(fill="both", expand="true")
+        
+        
+    #Method to show the required partner feedback screen
+    def show_required_partner_feedback(self, user_id):
+        self.clear_screen()
+        self.geometry("550x650")
+        
+        self.current_frame = Member_Show_Required_Partner_Feedback(self, self, user_id)
+        self.current_frame.pack(fill="both", expand="true")
+        
+        
+    #Method to show the required partner feedback screen
+    def show_submit_partner_feedback(self, user_id, result):
+        self.clear_screen()
+        self.geometry("550x650")
+        
+        self.current_frame = Member_Sumbit_Feedback(self, self, user_id, result)
         self.current_frame.pack(fill="both", expand="true")
 
 

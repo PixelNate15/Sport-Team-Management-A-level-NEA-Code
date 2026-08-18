@@ -60,7 +60,7 @@ class Member_Main_Screen(tk.Frame):
         self.app.show_recent_partner_feedback(self.user_id)
         
     def open_give_partner_feedback(self):
-        pass
+        self.app.show_required_partner_feedback(self.user_id)
 
 
     def open_recent_results(self):

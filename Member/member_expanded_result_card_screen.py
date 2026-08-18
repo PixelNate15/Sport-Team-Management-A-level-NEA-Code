@@ -19,8 +19,8 @@ class Member_Expanded_Result_Card_Screen(tk.Frame):
         self.header.pack(side="top", fill="x")
         
         #Put the result details on the screen
-        self.fixture_details = View_Result_Details(self, result)
-        self.fixture_details.pack(side="top", fill="x")
+        self.result_details = View_Result_Details(self, result)
+        self.result_details.pack(side="top", fill="x")
         
         #Label to put the partnerfeedback they recieved for that match
         self.lbl_partnerfeedback = tk.Label(self, text="Partner Feedback", font=c.FONT_HEADING, fg=c.LIGHT_MAIN_TEXT, bg=c.LIGHT_BACKGROUND, justify="right")

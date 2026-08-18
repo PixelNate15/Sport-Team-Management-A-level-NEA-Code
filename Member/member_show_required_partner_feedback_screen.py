@@ -6,7 +6,7 @@ from SQL import get_result_of_fixture_for_one_user
 import tkinter as tk
 
 
-class Member_Show_Recent_Results(tk.Frame):
+class Member_Show_Required_Partner_Feedback(tk.Frame):
     def __init__(self, parent, app, user_id):
         super().__init__(parent, bg=c.LIGHT_BACKGROUND)
         self.app = app
@@ -17,12 +17,12 @@ class Member_Show_Recent_Results(tk.Frame):
         self.header.pack(side="top", fill="x")
         
         #Create label for results
-        self.lbl_results = tk.Label(self, text="Recent Results", font=c.FONT_HEADING, fg=c.LIGHT_MAIN_TEXT, bg=c.LIGHT_BACKGROUND, justify="right")
+        self.lbl_results = tk.Label(self, text="Feedback Required", font=c.FONT_HEADING, fg=c.LIGHT_MAIN_TEXT, bg=c.LIGHT_BACKGROUND, justify="right")
         self.lbl_results.pack(anchor="w", padx=(10,0), pady=10)
         
         #Put result cards onto the screen
         self.results = get_result_of_fixture_for_one_user(self.user_id)
-        self.results_frame = result_cards(self, self.results, self.expand_card, False)
+        self.results_frame = result_cards(self, self.results, self.submit_feedback, True, self.user_id)
         self.results_frame.pack()
         
         #Put back button onto the screen 
@@ -30,12 +30,11 @@ class Member_Show_Recent_Results(tk.Frame):
         self.btn_back.pack(pady=15)
         
         
-    #Method to expand a result card
-    def expand_card(self, result):
-        self.app.show_expanded_result(self.user_id, result)
+    #Method to go to submit feedback screen
+    def submit_feedback(self, result):
+        self.app.show_submit_partner_feedback(self.user_id, result)
         
 
     #Method to return to login screen
     def return_to_main_screen(self):
         self.app.show_main_screen(self.user_id)
-    
