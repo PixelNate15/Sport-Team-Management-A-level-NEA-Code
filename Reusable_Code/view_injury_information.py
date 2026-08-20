@@ -5,9 +5,9 @@ class View_Injury_Details(tk.Frame):
     def __init__(self, parent, injury = None):
         super().__init__(parent, bg=c.LIGHT_BACKGROUND)
         self.injury = injury
-        self.can_you_play_text = ("Yes" if self.injury["can_play"] == 1 else "No")
     
         if self.injury:
+            self.can_you_play_text = ("Yes" if self.injury["can_play"] == 1 else "No")
             rows = [
                 ("Injury", self.injury["description"]),
                 ("Return Date", self.injury["expected_end_date"]),

@@ -435,7 +435,7 @@ def get_injury_info(user_id) -> dict:
     cursor = connection.cursor()
     
     sql = """
-    SELECT description, expected_end_date, is_current, notes, can_play
+    SELECT injury_id, description, expected_end_date, is_current, notes, can_play
     FROM injury
     WHERE user_id = %s AND is_current = 1
     """
@@ -452,11 +452,12 @@ def get_injury_info(user_id) -> dict:
         return None
     
     injury_info = {
-        "description": results[0],
-        "expected_end_date": results[1],
-        "is_current": results[2],
-        "notes": results[3],
-        "can_play": (results[4])
+        "injury_id": results[0],
+        "description": results[1],
+        "expected_end_date": results[2],
+        "is_current": results[3],
+        "notes": results[4],
+        "can_play": results[5]
     }
     return injury_info
 
