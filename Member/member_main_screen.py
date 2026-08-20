@@ -48,20 +48,26 @@ class Member_Main_Screen(tk.Frame):
         self.app.show_expanded_fixture(self.user_id, fixture)
 
 
+    #Method to open the view injury status screen
     def open_injury_status(self):
-        pass
+        self.app.show_view_injury_status(self.user_id)
 
 
+    #Method to open the selected fixtures screen
     def open_selected_fixtures(self):
         self.app.show_selected_fixtures(self.user_id, self.fixtures)
 
 
+    #Method to open the recent partner feedback screen
     def open_recent_partner_feedback(self):
         self.app.show_recent_partner_feedback(self.user_id)
-        
+       
+       
+    #Method to open the give partner feedback screen    
     def open_give_partner_feedback(self):
         self.app.show_required_partner_feedback(self.user_id)
 
 
+    #Method to open the recent results screen
     def open_recent_results(self):
         self.app.show_recent_results(self.user_id)

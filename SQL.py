@@ -184,7 +184,7 @@ def get_fixtures(user_id: int) -> list[dict]:
 
 
 #Function to insert the availability of a member for a fixture - requires fixture_id,  user_id, is_available and an optional variable of reason
-def insert_availability_details(fixture_id: int, user_id: int, is_available: bool, reason: str | None = None):
+def insert_availability_details(fixture_id: int, user_id: int, is_available: bool, reason: str | None = None) -> None:
     connection = connect_database()
     cursor = connection.cursor()
     
@@ -409,7 +409,7 @@ def get_partner_info(user_id: int, match_id: int) -> list[dict]:
 
 
 #Function to insert partner feedback for a fixture
-def insert_partner_feedback(match_id: int, reviewer_id: int, reviewed_id: int, overall_rating: int, key_moments_rating: int, communication_rating: int, comments: str):
+def insert_partner_feedback(match_id: int, reviewer_id: int, reviewed_id: int, overall_rating: int, key_moments_rating: int, communication_rating: int, comments: str) -> None:
     connection = connect_database()
     cursor = connection.cursor()
     
@@ -422,6 +422,115 @@ def insert_partner_feedback(match_id: int, reviewer_id: int, reviewed_id: int, o
     values = (match_id, reviewer_id, reviewed_id, overall_rating, key_moments_rating, communication_rating, comments, date.today())
 
     print(sql.count("%s"), len(values))
+    cursor.execute(sql, values)
+    connection.commit()
+
+    cursor.close()
+    connection.close()
+    
+    
+#Function to get a players injury status - requires user_id
+def get_injury_info(user_id) -> dict:
+    connection = connect_database()
+    cursor = connection.cursor()
+    
+    sql = """
+    SELECT description, expected_end_date, is_current, notes, can_play
+    FROM injury
+    WHERE user_id = %s AND is_current = 1
+    """
+    
+    values = (user_id,)
+
+    cursor.execute(sql, values)
+    results = cursor.fetchone()
+
+    cursor.close()
+    connection.close()
+    
+    if results == None:
+        return None
+    
+    injury_info = {
+        "description": results[0],
+        "expected_end_date": results[1],
+        "is_current": results[2],
+        "notes": results[3],
+        "can_play": (results[4])
+    }
+    return injury_info
+
+
+#Function to change the is_current injury to 0 from 1 - requires injury_id
+def remove_injury_status(injury_id: int) -> None:
+    connection = connect_database()
+    cursor = connection.cursor()
+
+    sql = """
+        UPDATE injury
+        SET is_current = 0
+        WHERE injury_id = %s
+    """
+    
+    value = (injury_id,)
+    
+    cursor.execute(sql, value)
+    connection.commit()
+
+    cursor.close()
+    connection.close()
+    
+    
+#Function to update the injury status row for the member
+def member_update_injury_status(injury_id: int, description: str, expected_end_date: date, can_play: bool, notes: str) -> None:
+    connection = connect_database()
+    cursor = connection.cursor()
+
+    sql = """
+        UPDATE injury
+        SET description = %s, expected_end_date = %s, notes = %s, can_play = %s
+        WHERE injury_id = %s
+    """
+    values = (description, expected_end_date, notes, can_play, injury_id)
+
+    cursor.execute(sql, values)
+    connection.commit()
+
+    cursor.close()
+    connection.close()
+    
+    
+#Function to update the injury status row for the captain
+def captain_update_injury_status(injury_id: int, injury_weighting: float) -> None:
+    connection = connect_database()
+    cursor = connection.cursor()
+
+    sql = """
+        UPDATE injury
+        SET injury_weighting = %s
+        WHERE injury_id = %s
+    """
+    values = (injury_weighting, injury_id)
+
+    cursor.execute(sql, values)
+    connection.commit()
+
+    cursor.close()
+    connection.close()
+    
+    
+#Function to add an injury status
+def insert_injury_status(user_id: int, description: str, expected_end_date: date, can_play: bool, notes: str) -> None:
+    connection = connect_database()
+    cursor = connection.cursor()
+
+    sql = """
+        INSERT into injury
+        (user_id, description, start_date, expected_end_date, is_current, notes, injury_weighting, can_play)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+    """
+    values = (user_id, description, date.today(), expected_end_date, True, notes, None, can_play)
+    
     cursor.execute(sql, values)
     connection.commit()
 
