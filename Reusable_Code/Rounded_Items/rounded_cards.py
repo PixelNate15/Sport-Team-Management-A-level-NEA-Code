@@ -32,6 +32,13 @@ class Rounded_Card(tk.Frame):
     #Method to change the set colour to draw the card in
     def set_colour(self, colour):
         self._draw(colour)
-        self.content.config(bg=colour)
-        for child in self.content.winfo_children():
-            child.config(bg=colour)        
+        def change_children(widget):
+            try:
+                widget.config(bg=colour)
+            except tk.TclError:
+                pass
+
+            for child in widget.winfo_children():
+                change_children(child)
+
+        change_children(self.content)     

@@ -31,7 +31,7 @@ class player_cards(tk.Frame):
         avatar_size = 54
         avatar_canvas = tk.Canvas(card.content, width=avatar_size, height=avatar_size, bg=bg_colour, highlightthickness=0)
         avatar_canvas.pack(side="left", padx=(10, 15))
-        avatar_canvas.create_oval(2, 2, avatar_size - 2, avatar_size - 2, outline=c.LIGHT_MAIN_TEXT, width=2, fill=bg_colour)
+        avatar_canvas.create_oval(2, 2, avatar_size - 2, avatar_size - 2, outline=c.LIGHT_MAIN_TEXT, width=2, fill=bg_colour, tags="avatar_background")
         avatar_canvas.create_text(avatar_size / 2, avatar_size / 2, text=initials, font=c.FONT_HEADING, fill=c.LIGHT_MAIN_TEXT)
         
         #Create label for name
@@ -59,5 +59,34 @@ class player_cards(tk.Frame):
     
     #Method to changed the bg colour of a card when its being hovered over
     def bind_hover(self, card, bg_colour, hover_colour):
-        card.canvas.bind("<Enter>", lambda e: card.set_colour(hover_colour))
-        card.canvas.bind("<Leave>", lambda e: card.set_colour(bg_colour))
+
+        def on_enter(event):
+            card.set_colour(hover_colour)
+
+        def on_leave(event):
+            # Find the widget currently underneath the mouse
+            widget_under_mouse = card.winfo_containing(
+                card.winfo_pointerx(),
+                card.winfo_pointery()
+            )
+
+            # Only remove hover if we've actually left the whole card
+            widget = widget_under_mouse
+
+            while widget is not None:
+                if widget == card:
+                    return
+                try:
+                    widget = widget.master
+                except:
+                    break
+            card.set_colour(bg_colour)
+
+        def bind_recursive(widget):
+            widget.bind("<Enter>", on_enter, add="+")
+            widget.bind("<Leave>", on_leave, add="+")
+
+            for child in widget.winfo_children():
+                bind_recursive(child)
+
+        bind_recursive(card)
