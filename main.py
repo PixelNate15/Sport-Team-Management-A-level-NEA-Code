@@ -15,7 +15,7 @@ from Member.member_show_required_partner_feedback_screen import Member_Show_Requ
 from Member.member_submit_feedback import Member_Sumbit_Feedback
 from Member.member_view_injury_status_screen import Member_View_Injury_Status
 from Member.member_edit_injury_status_screen import Member_Edit_Injury_Status
-from Captain.main_screen_captain import Main_Screen_Captain
+from Captain.captain_main_screen import Captain_Main_Screen
 
 
 class App (tk.Tk):
@@ -25,7 +25,7 @@ class App (tk.Tk):
         self.iconbitmap("logo_ico.ico")
         self.title("Sports Team Management")
         self.current_frame = None
-        self.show_main_screen(2)
+        self.show_main_screen(1)
         
         
     #Method to clear the screen of the current frame
@@ -63,7 +63,7 @@ class App (tk.Tk):
             self.current_frame = Member_Main_Screen(self, self, user_id)
             self.current_frame.pack(fill="both", expand="true")
         else:
-            self.current_frame = Main_Screen_Captain(self, self, user_id)
+            self.current_frame = Captain_Main_Screen(self, self, user_id)
             self.current_frame.pack(fill="both", expand="true")
             
     

@@ -19,7 +19,7 @@ class Rounded_Card(tk.Frame):
         
         #Creates content frame which sits on top of drawn shape
         self.content = tk.Frame(self.canvas, bg=self.bg_colour)
-        self.canvas.create_window((width / 2), (height / 2), window=self.content)
+        self.canvas.create_window((width / 2), (height / 2), window=self.content, width=width - 20)
         
         
     #Method to redraw the card for the given colour

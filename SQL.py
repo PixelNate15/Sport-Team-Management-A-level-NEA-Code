@@ -537,3 +537,43 @@ def insert_injury_status(user_id: int, description: str, expected_end_date: date
 
     cursor.close()
     connection.close()
+    
+    
+#Function to get player details for one squad - requires user_id
+def get_players_in_one_squad(user_id: int) -> list[dict]:
+    connection = connect_database()
+    cursor = connection.cursor()
+
+    sql = """
+        SELECT u.user_id, u.first_name, u.surname, COUNT(mp.match_id) AS games_played, SUM(m.did_win) AS wins
+        FROM squad_players sp
+        JOIN user u ON u.user_id = sp.user_id
+        LEFT JOIN match_players mp ON mp.user_id = u.user_id
+        LEFT JOIN `match` m ON m.match_id = mp.match_id
+        WHERE sp.squad_id = (SELECT squad_id FROM squad_players WHERE user_id = %s LIMIT 1)
+        GROUP BY u.user_id, u.first_name, u.surname
+    """
+    
+    value = (user_id,)
+    
+    cursor.execute(sql, value)
+    results = cursor.fetchall()
+
+    cursor.close()
+    connection.close()
+    
+    players = []
+    for row in results:
+        games_played = row[3]
+        wins = row[4] if row[4] is not None else 0
+        win_loss_percentage = round((wins / games_played) * 100, 1) if games_played > 0 else 0
+        
+        players.append({
+            "user_id": row[0],
+            "firstname": row[1],
+            "surname": row[2],
+            "games_played": games_played,
+            "win_percentage": win_loss_percentage
+        })
+        
+    return players
