@@ -1,9 +1,9 @@
+import constants as c
 from System.form_score_calculation import calculate_form_score
 from SQL import get_all_available_players, count_partnership_matches
 
-FORM_THRESHOLD = 0.05
-PAIRS_PER_TEAM = 2
 
+#Main function that will return the pairings
 def generate_recommended_team(fixture_id):
     players = get_all_available_players(fixture_id)
     if players is not None:
@@ -16,9 +16,10 @@ def generate_recommended_team(fixture_id):
     
     return create_pairings(sorted_players, [])
     
-    
+
+#Function that creates the pairings recursively  
 def create_pairings(remaining_players, recommended_team):
-    if len(recommended_team) == PAIRS_PER_TEAM:
+    if len(recommended_team) == c.PAIRS_PER_TEAM:
         return recommended_team
     
     if len(remaining_players) < 2:
@@ -34,7 +35,7 @@ def create_pairings(remaining_players, recommended_team):
             continue
         
         difference = abs(player_1["form_score"] - player["form_score"])
-        if difference <= FORM_THRESHOLD:
+        if difference <= c.FORM_THRESHOLD:
             close_players.append(player)
             
     if close_players:
@@ -51,7 +52,9 @@ def create_pairings(remaining_players, recommended_team):
             new_remaining_players.append(player)
             
     return create_pairings(new_remaining_players, recommended_team)
-            
+
+
+#Function which chooses which of the players within 0.05 form is the best fit to be the players partner    
 def choose_best_partner(player, possible_partners):
     best_partner = None
     most_matches_played = -1

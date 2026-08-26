@@ -31,6 +31,7 @@ DARK_SECONDARY_TEXT = "#B3B3B3"
 DARK_BORDER = "#404040"
 DARK_DISABLED = "#6B7280"
 
+
 #-- Fonts --#
 # Font Family
 FONT_FAMILY = "Segoe UI"
@@ -59,3 +60,14 @@ FONT_LABEL_BOLD = (FONT_FAMILY, 11, "bold")
 
 # Text Entry
 FONT_ENTRY = (FONT_FAMILY, 11)
+
+
+#--Form Score Calculation --#
+HALF_LIFE_DAYS = 60
+MIN_OPPONENT_FACTOR = 0.8
+DEFAULT_PARTNER_FACTOR = 1
+
+
+#-- Recommeded Team --#
+FORM_THRESHOLD = 0.05
+PAIRS_PER_TEAM = 2

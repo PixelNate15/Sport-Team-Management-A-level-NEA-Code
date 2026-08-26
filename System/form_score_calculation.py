@@ -1,12 +1,9 @@
+import constants as c
 from SQL import get_match_history_last_three_years, count_fixtures_before_date
 from datetime import date
 
-#Constants
-HALF_LIFE_DAYS = 60
-MIN_OPPONENT_FACTOR = 0.8
-DEFAULT_PARTNER_FACTOR = 1
 
-
+#Function that calculates the form score
 def calculate_form_score(user_id, before_date = None):
     if before_date is None:
         before_date = date.today()
@@ -34,6 +31,7 @@ def calculate_form_score(user_id, before_date = None):
         return weighted_score_total / weight_total
         
 
+#Function that calculates the games won/loss ratio
 def calculate_games_ratio(games_won, games_lost):
     total_games = games_won + games_lost
     if total_games == 0:
@@ -41,6 +39,7 @@ def calculate_games_ratio(games_won, games_lost):
     return games_won / total_games
 
 
+#Function that calculates the opponent weighting
 def calculate_opponent_factor(match):
     matches_played = count_fixtures_before_date(match["season_id"], match["date"])
     if matches_played >= 2:
@@ -48,7 +47,7 @@ def calculate_opponent_factor(match):
         opponent_league_position = match["opponent_league_position"]
         if total_teams is not None and opponent_league_position is not None:
             weighting_change = (total_teams - opponent_league_position) / 10
-            weighting = MIN_OPPONENT_FACTOR + weighting_change
+            weighting = c.MIN_OPPONENT_FACTOR + weighting_change
             return weighting
         else:
             return 1.0
@@ -56,13 +55,15 @@ def calculate_opponent_factor(match):
         return 1.0
     
 
+#Function that calculates the partner weighting
 def calculate_partner_factor(partner_form_at_time_of_match):
     if partner_form_at_time_of_match is not None:
         return partner_form_at_time_of_match
     else:
-        return DEFAULT_PARTNER_FACTOR
+        return c.DEFAULT_PARTNER_FACTOR
     
 
+#Function that calculates the recency factor
 def calculate_recency_factor(before_date, match_date):
     days_since_match = (before_date - match_date).days
-    return 0.5 ** (days_since_match / HALF_LIFE_DAYS)
+    return 0.5 ** (days_since_match / c.HALF_LIFE_DAYS)
