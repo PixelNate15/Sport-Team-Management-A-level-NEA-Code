@@ -500,26 +500,7 @@ def member_update_injury_status(injury_id: int, description: str, expected_end_d
 
     cursor.close()
     connection.close()
-    
-    
-#Function to update the injury status row for the captain
-def captain_update_injury_status(injury_id: int, injury_weighting: float) -> None:
-    connection = connect_database()
-    cursor = connection.cursor()
-
-    sql = """
-        UPDATE injury
-        SET injury_weighting = %s
-        WHERE injury_id = %s
-    """
-    values = (injury_weighting, injury_id)
-
-    cursor.execute(sql, values)
-    connection.commit()
-
-    cursor.close()
-    connection.close()
-    
+       
     
 #Function to add an injury status
 def insert_injury_status(user_id: int, description: str, expected_end_date: date, can_play: bool, notes: str) -> None:
@@ -625,7 +606,7 @@ def count_fixtures_before_date(season_id: int, before_date: date) -> int:
     cursor = connection.cursor()
     
     sql = """
-        SELECT COUNT(fixture_id) as amount_fixtures
+        SELECT COUNT(f.fixture_id) as amount_fixtures
         FROM fixture f
         WHERE f.season_id = %s AND f.date < %s AND (SELECT 1 FROM `match` m WHERE m.fixture_id = f.fixture_id)
     """
@@ -639,3 +620,59 @@ def count_fixtures_before_date(season_id: int, before_date: date) -> int:
     connection.close()
     
     return results[0]
+
+
+#Function to return all available players for a fixture - requires fixture_id
+def get_all_available_players(fixture_id: int) -> list[dict]:
+    connection = connect_database()
+    cursor = connection.cursor()
+    
+    sql = """
+        SELECT u.user_id, u.first_name, u.surname
+        FROM availability a
+        JOIN user u ON a.user_id = u.user_id
+        LEFT JOIN injury i ON a.user_id = i.user_id AND i.is_current = 1
+        WHERE a.fixture_id = %s AND a.is_available = 1 AND (i.injury_id = NULL OR i.can_play = 1)
+    """
+    
+    value = (fixture_id,)
+    
+    cursor.execute(sql, value)
+    results = cursor.fetchall()
+    
+    cursor.close()
+    connection.close()
+    
+    players = []
+    for row in results:
+        players.append({
+            "user_id": row[0],
+            "firstname": row[1],
+            "surname": row[2]
+        })
+        
+    return players
+
+
+#Function to count how many times a player has played with another player
+def count_partnership_matches(player_id: int, partner_id: int) -> int:
+    connection = connect_database()
+    cursor = connection.cursor()
+    
+    sql = """
+        SELECT COUNT(mp.match_player_id) as times_played
+        FROM match_players mp
+        JOIN match m ON mp.match_id = m.match_id
+        WHERE mp.user_id = %s AND mp.partner_user_id = %s AND m.date >= %s
+    """
+    
+    values = (player_id, partner_id, (date.today() - relativedelta(years=3)))
+    
+    cursor.execute(sql, values)
+    results = cursor.fetchone()
+    
+    cursor.close()
+    connection.close()
+    
+    return results[0]
+    
