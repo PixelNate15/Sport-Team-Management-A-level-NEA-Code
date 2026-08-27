@@ -527,11 +527,14 @@ def get_players_in_one_squad(user_id: int) -> list[dict]:
     cursor = connection.cursor()
 
     sql = """
-        SELECT u.user_id, u.first_name, u.surname, COUNT(mp.match_id) AS games_played, SUM(m.did_win) AS wins
+        SELECT u.user_id, u.first_name, u.surname, COUNT(mp.match_id) AS games_played, SUM(m.did_win) AS wins, MAX(m.date) AS last_match_date, MAX(i.description) AS injury_description, COUNT(DISTINCT CASE WHEN s.is_current = 1 THEN m.fixture_id ELSE NULL END) AS fixtures_played_this_season
         FROM squad_players sp
-        JOIN user u ON u.user_id = sp.user_id
+        JOIN `user` u ON u.user_id = sp.user_id
         LEFT JOIN match_players mp ON mp.user_id = u.user_id
         LEFT JOIN `match` m ON m.match_id = mp.match_id
+        LEFT JOIN fixture f ON f.fixture_id = m.fixture_id
+        LEFT JOIN season s ON s.season_id = f.season_id
+        LEFT JOIN injury i ON i.user_id = u.user_id AND i.is_current = 1
         WHERE sp.squad_id = (SELECT squad_id FROM squad_players WHERE user_id = %s LIMIT 1)
         GROUP BY u.user_id, u.first_name, u.surname
     """
@@ -555,7 +558,10 @@ def get_players_in_one_squad(user_id: int) -> list[dict]:
             "firstname": row[1],
             "surname": row[2],
             "games_played": games_played,
-            "win_percentage": win_loss_percentage
+            "win_percentage": win_loss_percentage,
+            "last_match_date": row[5],
+            "injury_description": row[6],
+            "fixtures_played_this_season": row[7]
         })
         
     return players
@@ -676,3 +682,36 @@ def count_partnership_matches(player_id: int, partner_id: int) -> int:
     
     return results[0]
     
+    
+#Function to get the last 10 feedback scores about a user - requires user_id
+def get_last_ten_feedback_scores(user_id: int) -> list[dict]:
+    connection = connect_database()
+    cursor = connection.cursor()
+    
+    sql = """
+        SELECT overall_rating, key_moments_rating, communication_rating, date
+        FROM partner_feedback pf
+        WHERE reviewed_id = %s
+        ORDER BY date DESC
+        LIMIT 10
+    """
+    
+    value = (user_id,)
+    
+    cursor.execute(sql, value)
+    results = cursor.fetchall()
+    
+    cursor.close()
+    connection.close()
+    
+    feedback_scores = []
+    for row in results:
+        feedback_scores.append({
+            "overall_rating": row[0],
+            "key_moments_rating": row[1],
+            "communication_rating": row[2]
+        })
+        
+    feedback_scores.reverse()
+    
+    return feedback_scores

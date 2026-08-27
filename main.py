@@ -16,6 +16,7 @@ from Member.member_submit_feedback import Member_Sumbit_Feedback
 from Member.member_view_injury_status_screen import Member_View_Injury_Status
 from Member.member_edit_injury_status_screen import Member_Edit_Injury_Status
 from Captain.captain_main_screen import Captain_Main_Screen
+from Captain.captain_expanded_player_card import Captain_Expanded_Player_Card_Screen
 
 
 class App (tk.Tk):
@@ -164,6 +165,15 @@ class App (tk.Tk):
         self.geometry("550x650")
         
         self.current_frame = Member_Edit_Injury_Status(self, self, user_id, injury)
+        self.current_frame.pack(fill="both", expand="true")
+        
+    
+    #Method to show the expanded player card screen
+    def show_expanded_player_card(self, user_id, player):
+        self.clear_screen()
+        self.geometry("900x1150")
+        
+        self.current_frame = Captain_Expanded_Player_Card_Screen(self, self, user_id, player)
         self.current_frame.pack(fill="both", expand="true")
 
 

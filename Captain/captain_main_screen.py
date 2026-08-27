@@ -37,8 +37,8 @@ class Captain_Main_Screen(tk.Frame):
         
           
     #Method to expand fixture card to view more details
-    def expand_card(self, fixture):
-        pass
+    def expand_card(self, player):
+        self.app.show_expanded_player_card(self.user_id, player)
 
 
     #Method to open the manage fixtures screen

@@ -36,6 +36,15 @@ class Member_Select_Availability_Screen(tk.Frame):
         self.btn_confirm = Rounded_Button(self, text="Confirm", command=self.confirm_availability, font=c.FONT_BUTTON, bg_colour=c.LIGHT_PRIMARY_ACCENT, hover_colour=c.LIGHT_ACCENT_HOVER, fg_colour="white", width=170, height=42, radius=16, parent_bg=c.LIGHT_BACKGROUND)
         self.btn_confirm.pack(pady=15, side="bottom")
         
+        #Put back button onto the screen
+        self.btn_back = Rounded_Button(self, text="Back", command=self.return_to_main_screen, font=c.FONT_BUTTON, bg_colour=c.LIGHT_PRIMARY_ACCENT, hover_colour=c.LIGHT_ACCENT_HOVER, fg_colour="white", width=170, height=42, radius=16, parent_bg=c.LIGHT_BACKGROUND)
+        self.btn_back.pack(pady=15)
+                
+                
+    #Method to return to the recent_results_screen
+    def return_to_main_screen(self):
+        self.app.show_main_screen(self.user_id)
+        
     
     #Method to toggle the viewing of the entry field 
     def toggle_reason_field(self):
