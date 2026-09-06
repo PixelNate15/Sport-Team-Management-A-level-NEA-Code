@@ -17,6 +17,7 @@ from Member.member_view_injury_status_screen import Member_View_Injury_Status
 from Member.member_edit_injury_status_screen import Member_Edit_Injury_Status
 from Captain.captain_main_screen import Captain_Main_Screen
 from Captain.captain_expanded_player_card import Captain_Expanded_Player_Card_Screen
+from Captain.captain_show_all_players_available_for_squad import Captain_Show_All_Players_Available_For_Squad
 
 
 class App (tk.Tk):
@@ -175,7 +176,16 @@ class App (tk.Tk):
         
         self.current_frame = Captain_Expanded_Player_Card_Screen(self, self, user_id, player)
         self.current_frame.pack(fill="both", expand="true")
-
+        
+        
+    #Method to show the all available players for squad screen
+    def show_all_players_available_for_squad(self, user_id):
+        self.clear_screen()
+        self.geometry("1100x1150")
+        
+        self.current_frame = Captain_Show_All_Players_Available_For_Squad(self, self, user_id)
+        self.current_frame.pack(fill="both", expand="true")
+        
 
 if __name__ == "__main__":
     app = App()

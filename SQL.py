@@ -527,41 +527,43 @@ def get_players_in_one_squad(user_id: int) -> list[dict]:
     cursor = connection.cursor()
 
     sql = """
-        SELECT u.user_id, u.first_name, u.surname, COUNT(mp.match_id) AS games_played, SUM(m.did_win) AS wins, MAX(m.date) AS last_match_date, MAX(i.description) AS injury_description, COUNT(DISTINCT CASE WHEN s.is_current = 1 THEN m.fixture_id ELSE NULL END) AS fixtures_played_this_season
+        SELECT u.user_id, u.first_name, u.surname, d.division_name, COUNT(mp.match_id) AS games_played, SUM(m.did_win) AS wins, MAX(m.date) AS last_match_date, MAX(i.description) AS injury_description, COUNT(DISTINCT CASE WHEN s.is_current = 1 THEN m.fixture_id ELSE NULL END) AS fixtures_played_this_season
         FROM squad_players sp
         JOIN `user` u ON u.user_id = sp.user_id
+        JOIN squad sq ON sq.squad_id = sp.squad_id
+        JOIN division d on d.division_id = sq.division_id
         LEFT JOIN match_players mp ON mp.user_id = u.user_id
         LEFT JOIN `match` m ON m.match_id = mp.match_id
         LEFT JOIN fixture f ON f.fixture_id = m.fixture_id
         LEFT JOIN season s ON s.season_id = f.season_id
         LEFT JOIN injury i ON i.user_id = u.user_id AND i.is_current = 1
         WHERE sp.squad_id = (SELECT squad_id FROM squad_players WHERE user_id = %s LIMIT 1)
-        GROUP BY u.user_id, u.first_name, u.surname
+        GROUP BY u.user_id, u.first_name, u.surname, d.division_name
     """
     
     value = (user_id,)
     
     cursor.execute(sql, value)
     results = cursor.fetchall()
-
     cursor.close()
     connection.close()
     
     players = []
     for row in results:
-        games_played = row[3]
-        wins = row[4] if row[4] is not None else 0
+        games_played = row[4]
+        wins = row[5] if row[5] is not None else 0
         win_loss_percentage = round((wins / games_played) * 100, 1) if games_played > 0 else 0
         
         players.append({
             "user_id": row[0],
             "firstname": row[1],
             "surname": row[2],
+            "division_name": row[3],
             "games_played": games_played,
             "win_percentage": win_loss_percentage,
-            "last_match_date": row[5],
-            "injury_description": row[6],
-            "fixtures_played_this_season": row[7]
+            "last_match_date": row[6],
+            "injury_description": row[7],
+            "fixtures_played_this_season": row[8]
         })
         
     return players
@@ -597,7 +599,7 @@ def get_match_history_last_three_years(user_id: int, before_date: date) -> list[
             "date": row[1],
             "games_won": row[2],
             "games_lost": row[3],
-            "partner_form_at_match": row[4],
+            "partner_form_at_match": float(row[4]) if row[4] is not None else None,
             "opponent_league_position": row[5],
             "division_team_count": row[6],
             "season_id": row[7]
@@ -614,7 +616,7 @@ def count_fixtures_before_date(season_id: int, before_date: date) -> int:
     sql = """
         SELECT COUNT(f.fixture_id) as amount_fixtures
         FROM fixture f
-        WHERE f.season_id = %s AND f.date < %s AND (SELECT 1 FROM `match` m WHERE m.fixture_id = f.fixture_id)
+        WHERE f.season_id = %s AND f.date < %s AND EXISTS (SELECT 1 FROM `match` m WHERE m.fixture_id = f.fixture_id)
     """
     
     values = (season_id, before_date)
@@ -715,3 +717,80 @@ def get_last_ten_feedback_scores(user_id: int) -> list[dict]:
     feedback_scores.reverse()
     
     return feedback_scores
+
+
+#Function to get information aboubt all players from the captains squad ranking and below - requires user_id, club_id, squad_ranking
+def get_all_players_for_squads_below_ranking(user_id: int, club_id: int) -> list[dict]:
+    connection = connect_database()
+    cursor = connection.cursor()
+    
+    sql = """
+        SELECT u.user_id, u.first_name, u.surname, d.division_name, COUNT(mp.match_id) AS games_played, SUM(m.did_win) AS wins, MAX(m.date) AS last_match_date, MAX(i.description) AS injury_description, COUNT(DISTINCT CASE WHEN s.is_current = 1 THEN m.fixture_id ELSE NULL END) AS fixtures_played_this_season
+        FROM squad_players sp
+        JOIN `user` u ON u.user_id = sp.user_id
+        JOIN squad sq ON sq.squad_id = sp.squad_id
+        JOIN division d ON d.division_id = sq.division_id
+        LEFT JOIN match_players mp ON mp.user_id = u.user_id
+        LEFT JOIN `match` m ON m.match_id = mp.match_id
+        LEFT JOIN fixture f ON f.fixture_id = m.fixture_id
+        LEFT JOIN season s ON s.season_id = f.season_id
+        LEFT JOIN injury i ON i.user_id = u.user_id AND i.is_current = 1
+        WHERE sq.squad_ranking >= (
+            SELECT sq2.squad_ranking
+            FROM squad_players sp2
+            JOIN squad sq2 ON sq2.squad_id = sp2.squad_id
+            WHERE sp2.user_id = %s
+            LIMIT 1
+            ) AND u.club_id = %s 
+        GROUP BY u.user_id, u.first_name, u.surname, d.division_name
+    """
+    
+    values = (user_id, club_id)
+        
+    cursor.execute(sql, values)
+    results = cursor.fetchall()
+
+    cursor.close()
+    connection.close()
+    
+    players = []
+    for row in results:
+        games_played = row[4]
+        wins = row[5] if row[5] is not None else 0
+        win_loss_percentage = round((wins / games_played) * 100, 1) if games_played > 0 else 0
+        
+        players.append({
+            "user_id": row[0],
+            "firstname": row[1],
+            "surname": row[2],
+            "division_name": row[3],
+            "games_played": games_played,
+            "win_percentage": win_loss_percentage,
+            "last_match_date": row[6],
+            "injury_description": row[7],
+            "fixtures_played_this_season": row[8]
+        })
+        
+    return players
+
+
+#Function to get a user's club_id - requires user_id
+def get_club_id(user_id: int) -> int:
+    connection = connect_database()
+    cursor = connection.cursor()
+    
+    sql = """
+        SELECT club_id
+        FROM `user`
+        WHERE user_id = %s
+    """
+    
+    value = (user_id,)
+    
+    cursor.execute(sql, value)
+    results = cursor.fetchone()
+
+    cursor.close()
+    connection.close()
+    
+    return results[0]

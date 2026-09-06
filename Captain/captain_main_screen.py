@@ -53,7 +53,7 @@ class Captain_Main_Screen(tk.Frame):
     
     #Method to open the all members screen
     def open_all_members(self):
-        pass
+        self.app.show_all_players_available_for_squad(self.user_id)
     
     
     #Method to open the my player view screen

@@ -9,6 +9,7 @@ class View_Player_Details(tk.Frame):
         
         rows = [
             ("Win Percentage", self.player["win_percentage"]),
+            ("Current Division", self.player["division_name"]),
             ("Last Match Played Date", self.player["last_match_date"]),
             ("Fixtures Played This Season", self.player["fixtures_played_this_season"]),
             ("Injury Status", (self.player["injury_description"] if self.player["injury_description"] else "No Injury")),
