@@ -53,6 +53,8 @@ class Captain_Show_All_Players_Available_For_Squad(tk.Frame):
                     self.player_list = [player]
                     self.player_frame = player_cards(self, self.player_list, self.expand_card)
                     self.player_frame.pack(fill="both", expand=True)
+                    return
+            self.player_frame.destroy()
         elif len(self.search) == 2:
             for player in self.players:
                 if player["firstname"].lower() == self.search[0].lower() and player["surname"].lower() == self.search[1].lower():
@@ -60,6 +62,8 @@ class Captain_Show_All_Players_Available_For_Squad(tk.Frame):
                     self.player_list = [player]
                     self.player_frame = player_cards(self, self.player_list, self.expand_card)
                     self.player_frame.pack(fill="both", expand=True)
+                    return
+            self.player_frame.destroy()
         elif len(self.search) == 0:
             self.player_frame.destroy()
             self.player_frame = player_cards(self, self.players, self.expand_card, True)
