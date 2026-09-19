@@ -45,7 +45,27 @@ class Captain_Show_All_Players_Available_For_Squad(tk.Frame):
     
     #Method to filter player cards
     def filter_player_cards(self):
-        pass        
+        self.search = self.ent_search.get().strip().split()
+        if len(self.search) == 1:
+            for player in self.players:
+                if player["firstname"].lower() == self.search[0].lower() or player["surname"].lower() == self.search[0].lower():
+                    self.player_frame.destroy()
+                    self.player_list = [player]
+                    self.player_frame = player_cards(self, self.player_list, self.expand_card)
+                    self.player_frame.pack(fill="both", expand=True)
+        elif len(self.search) == 2:
+            for player in self.players:
+                if player["firstname"].lower() == self.search[0].lower() and player["surname"].lower() == self.search[1].lower():
+                    self.player_frame.destroy()
+                    self.player_list = [player]
+                    self.player_frame = player_cards(self, self.player_list, self.expand_card)
+                    self.player_frame.pack(fill="both", expand=True)
+        elif len(self.search) == 0:
+            self.player_frame.destroy()
+            self.player_frame = player_cards(self, self.players, self.expand_card, True)
+            self.player_frame.pack(fill="both", expand=True)
+        else:
+            self.player_frame.destroy()       
         
         
     #Method to return to the recent_results_screen

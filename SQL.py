@@ -14,10 +14,16 @@ def format_time(td):
 #Function to connect to the database
 def connect_database():
     try:
+        myIP = getHomeIP()
+        username = "alevel_user"
+        password = "b6ZMUxyMrEdPU1oSjJfLRFBvTOVJWH7h"
+        # myIP = "localhost"
+        # username = "root"
+        # password = ""
         connection = mysql.connector.connect(
-            host=getHomeIP(),
-            user="alevel_user",
-            password="b6ZMUxyMrEdPU1oSjJfLRFBvTOVJWH7h",
+            host=myIP,
+            user=username,
+            password=password,
             database="alevel_app"
         )
 
