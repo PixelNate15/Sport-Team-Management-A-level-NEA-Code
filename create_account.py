@@ -62,7 +62,7 @@ class Create_Account_Screen(tk.Frame):
         self.ent_password2.pack(pady=(0,15))
 
         #Create the create account button
-        self.btn_create_account = tk.Button(self, text="Create Account", font=c.FONT_BUTTON, bg=c.LIGHT_PRIMARY_ACCENT, fg="white", activebackground=c.DARK_PRIMARY_ACCENT, activeforeground="white", command=self.create_account, state="disabled")
+        self.btn_create_account = tk.Button(self, text="Create Account", font=c.FONT_BUTTON, bg=c.LIGHT_PRIMARY_ACCENT, fg="white", activebackground=c.DARK_PRIMARY_ACCENT, activeforeground="white", disabledforeground="white", command=self.create_account, state="disabled")
         add_hover(self.btn_create_account, c.LIGHT_PRIMARY_ACCENT, c.LIGHT_ACCENT_HOVER)
         self.btn_create_account.pack(pady=(0,10))
 
@@ -72,7 +72,38 @@ class Create_Account_Screen(tk.Frame):
         self.firstname = self.ent_firstname.get().strip()
         self.surname = self.ent_surname.get().strip()
         self.dob = self.ent_dob.get_date()
-        if (self.firstname) and (self.surname) and (self.dob < date.today()):
+        if (self.firstname) and (self.surname):
+            
+            #Validation for firstname
+            if len(self.firstname) > 50:
+                messagebox.showinfo(message="Firstname is too long", title="Username Generation Error")
+                return
+            elif not self.firstname.isalpha():
+                messagebox.showinfo(message="Firstname must be just letters", title="Username Generation Error")
+                return
+                 
+            #Validation for surname     
+            if len(self.surname) > 50:
+                messagebox.showinfo(message="Surname is too long", title="Username Generation Error")
+                return
+            elif not self.surname.isalpha():
+                messagebox.showinfo(message="Surname must be just letters", title="Username Generation Error")
+                return
+            
+            #Validation for date of birth
+            if self.dob == date.today():
+                messagebox.showinfo(message="Date of Birth cannot be today", title="Username Generation Error")
+                return
+            elif self.dob > date.today():
+                messagebox.showinfo(message="Date cannot be in the future", title="Username Generation Error")
+                return
+            elif (date.today().year - self.dob.year - ((date.today().month, date.today().day) < (self.dob.month, self.dob.day))) >= 100:
+                messagebox.showinfo(message="Date cannot be 100+ years ago", title="Username Generation Error")
+                return
+            elif date.today().year == self.dob.year:
+                messagebox.showinfo(message="Date cannot be this year", title="Username Generation Error")
+                return
+
             self.isUsernameGenerated = False
             self.count = 0
             self.username = (self.firstname[:3]) + (self.surname[:3]) + (str(self.dob.year)[-2:])
@@ -97,7 +128,26 @@ class Create_Account_Screen(tk.Frame):
         self.email = self.ent_email.get().strip()
         self.password1 = self.ent_password1.get().strip()
         self.password2 = self.ent_password2.get().strip()
-        if (self.email) and (self.password1) and (self.password1 == self.password2):
+        if (self.email) and (self.password1) and (self.password1) and (self.password2):
+            
+            #Email Validation
+            if len(self.email) > 100:
+                messagebox.showinfo(message="Email is too long", title="Account Creation Error")
+                return
+                
+            #Password Validation
+            if self.password1 != self.password2:
+                messagebox.showinfo(message="Passwords do not match", title="Account Creation Error")
+                return
+            elif len(self.password1) < 4:
+                messagebox.showinfo(message="Password is too short", title="Account Creation Error")
+                return
+            elif len(self.password1) > 50:
+                messagebox.showinfo(message="Password is too long", title="Account Creation Error")
+                return
+            
             self.hashed_password = b.hashpw(self.password1.encode('utf-8'), b.gensalt())
             self.user_id = insert_account_details(self.firstname, self.surname, self.dob, self.username, self.hashed_password, self.email)
             self.app.show_main_screen(self.user_id)
+        else:
+            messagebox.showinfo(message="Account cannot be created without sufficient information, try again", title="Account Creation Error")

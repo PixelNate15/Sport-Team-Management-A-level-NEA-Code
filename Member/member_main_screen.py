@@ -17,7 +17,7 @@ class Member_Main_Screen(tk.Frame):
         
         #Create buttons for sidebar
         self.buttons = [
-            ("Manage Availability", self.open_availability),
+            ("Manange Availability", self.open_availability),
             ("Manage Injury Status", self.open_injury_status),
             ("Selected Fixture", self.open_selected_fixtures),
             ("Open Partner Feedback", self.open_recent_partner_feedback),

@@ -1,5 +1,4 @@
 import constants as c
-from Reusable_Code.reusable_buttons import add_hover
 import tkinter as tk
 from tkinter import messagebox
 from SQL import check_password_hash, get_user_id
@@ -28,11 +27,9 @@ class Login_Screen(tk.Frame):
 
         #Create login button and create new account button and put in frame
         self.btn_login = tk.Button(self, text="Login", font=c.FONT_BUTTON, bg=c.LIGHT_PRIMARY_ACCENT, fg="white", activebackground=c.DARK_PRIMARY_ACCENT, activeforeground="white", command=self.login)
-        add_hover(self.btn_login, c.LIGHT_PRIMARY_ACCENT, c.LIGHT_ACCENT_HOVER)
         self.btn_login.pack(pady=(0,20))
 
         self.btn_create_account = tk.Button(self, text="Create Account", font=c.FONT_BUTTON, bg=c.LIGHT_PRIMARY_ACCENT, fg="white", activebackground=c.DARK_PRIMARY_ACCENT, activeforeground="white", command=self.create_account)
-        add_hover(self.btn_create_account, c.LIGHT_PRIMARY_ACCENT, c.LIGHT_ACCENT_HOVER)
         self.btn_create_account.pack()
 
 

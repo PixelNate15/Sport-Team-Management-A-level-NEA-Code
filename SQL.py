@@ -69,15 +69,19 @@ def insert_account_details(firstname: str, surname: str, date_of_birth: datetime
     """
     values = (firstname, surname, username, password_hash, date_of_birth, False, email, True)
 
-    cursor.execute(sql, values)
-    connection.commit()
+    try:
+        cursor.execute(sql, values)
+        connection.commit()
 
-    new_user_id = cursor.lastrowid
+        new_user_id = cursor.lastrowid
 
-    cursor.close()
-    connection.close()
+        cursor.close()
+        connection.close()
 
-    return new_user_id
+        return new_user_id
+
+    except Exception as err:
+        return None
 
 
 #Function to check that a username is not already in the db - requires username

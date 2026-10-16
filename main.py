@@ -27,7 +27,7 @@ class App (tk.Tk):
         self.iconbitmap("logo_ico.ico")
         self.title("Sports Team Management")
         self.current_frame = None
-        self.show_main_screen(1)
+        self.show_main_screen(2)
         
         
     #Method to clear the screen of the current frame
@@ -40,7 +40,6 @@ class App (tk.Tk):
     def show_login_screen(self):
         self.clear_screen()
         self.geometry("550x400")
-        
         self.current_frame = Login_Screen(self, self)
         self.current_frame.pack(fill="both", expand="true")
 
