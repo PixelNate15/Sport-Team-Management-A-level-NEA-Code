@@ -1,6 +1,6 @@
 import tkinter as tk
 import constants as c
-from Reusable_Code.Rounded_Items.rounded_cards import Rounded_Card
+from Reusable_Code.Rounded_Items.rounded_item import Rounded_Item
 
 
 class player_cards(tk.Frame):
@@ -34,11 +34,11 @@ class player_cards(tk.Frame):
             ("Win Percentage:", f"{player["win_percentage"]}%")
         ]
         
-        card = Rounded_Card(self, width=500, height=70, radius=16, bg_colour=bg_colour, parent_bg_colour=c.LIGHT_BACKGROUND, hover_colour=hover_colour)
+        card = Rounded_Item(self, width=500, height=70, radius=16, bg_colour=bg_colour, parent_bg_colour=c.LIGHT_BACKGROUND, hover_colour=hover_colour, command=lambda p=player: self.on_click(p))
         if self.want_grid == True:
             card.grid(row=row, column=column, padx=10, pady=5, sticky="nsew")
         else:    
-            card.pack(fill="x", padx=10, pady=5)
+            card.pack(padx=10, pady=5)
         
         #Circle avatar, sized to fill the card height with a small margin
         avatar_size = 54
@@ -58,48 +58,5 @@ class player_cards(tk.Frame):
             lbl_stat = tk.Label(stats_frame, text=f"{title} {value}", font=c.FONT_LABEL, bg=bg_colour, fg=c.LIGHT_MAIN_TEXT, anchor="w")
             lbl_stat.pack(anchor="w")
         
-        #Bind click and hover to whole card, recursively doing it to all child widgets
-        self.bind_click(card, lambda p=player: self.on_click(p))
-        self.bind_hover(card, card.bg_colour, card.hover_colour)
-            
-        
-    #Method to give a card the ability to be clicked 
-    def bind_click(self, widget, command):
-        widget.bind("<Button-1>", lambda e: command())
-        for child in widget.winfo_children():
-            self.bind_click(child, command)
-            
-    
-    #Method to changed the bg colour of a card when its being hovered over
-    def bind_hover(self, card, bg_colour, hover_colour):
-
-        def on_enter(event):
-            card.set_colour(hover_colour)
-
-        def on_leave(event):
-            # Find the widget currently underneath the mouse
-            widget_under_mouse = card.winfo_containing(
-                card.winfo_pointerx(),
-                card.winfo_pointery()
-            )
-
-            # Only remove hover if we've actually left the whole card
-            widget = widget_under_mouse
-
-            while widget is not None:
-                if widget == card:
-                    return
-                try:
-                    widget = widget.master
-                except:
-                    break
-            card.set_colour(bg_colour)
-
-        def bind_recursive(widget):
-            widget.bind("<Enter>", on_enter, add="+")
-            widget.bind("<Leave>", on_leave, add="+")
-
-            for child in widget.winfo_children():
-                bind_recursive(child)
-
-        bind_recursive(card)
+        #Include the widgets added after the rounded item was constructed.
+        card.bind_children()

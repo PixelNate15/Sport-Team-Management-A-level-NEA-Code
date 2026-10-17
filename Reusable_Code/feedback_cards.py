@@ -1,5 +1,5 @@
 import constants as c
-from Reusable_Code.Rounded_Items.rounded_cards import Rounded_Card
+from Reusable_Code.Rounded_Items.rounded_item import Rounded_Item
 import tkinter as tk
 
 class Feedback_Cards(tk.Frame):
@@ -17,8 +17,8 @@ class Feedback_Cards(tk.Frame):
         title_sentence = f"{feedback['opposition']} ({feedback['home_away']}) - {feedback['date']}"
         ratings_sentence = f"Overall: {feedback['overall_rating']}/10   Key Moments: {feedback['key_moments_rating']}/10   Communication: {feedback['communication_rating']}/10"
         
-        card = Rounded_Card(self, width=500, height=80, radius=16, bg_colour=c.LIGHT_SIDEBAR, parent_bg_colour=c.LIGHT_BACKGROUND, hover_colour=None)
-        card.pack(fill="x", padx=10, pady=5)
+        card = Rounded_Item(self, width=500, height=80, radius=16, bg_colour=c.LIGHT_SIDEBAR, parent_bg_colour=c.LIGHT_BACKGROUND, hover_colour=None)
+        card.pack(padx=10, pady=5)
         
         lbl_title = tk.Label(card.content, text=title_sentence, font=c.FONT_LABEL, bg=c.LIGHT_SIDEBAR, fg="black")
         lbl_title.pack()
@@ -28,3 +28,6 @@ class Feedback_Cards(tk.Frame):
         
         lbl_comment = tk.Label(card.content, text=feedback["comments"], font=c.FONT_LABEL, bg=c.LIGHT_SIDEBAR, fg="black")
         lbl_comment.pack()
+
+        #Include the labels added after the rounded item was constructed.
+        card.bind_children()

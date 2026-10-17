@@ -1,6 +1,6 @@
 import constants as c
 from Reusable_Code.main_screen_header_panel import Header_Panel
-from Reusable_Code.Rounded_Items.rounded_button import Rounded_Button
+from Reusable_Code.Rounded_Items.rounded_item import Rounded_Item
 from SQL import insert_availability_details
 import tkinter as tk
 from tkinter import *
@@ -33,11 +33,11 @@ class Member_Select_Availability_Screen(tk.Frame):
         self.ent_reason = tk.Entry(self, font =c.FONT_ENTRY, bg=c.LIGHT_SIDEBAR, fg=c.LIGHT_PRIMARY_ACCENT, justify="center")
             
         #Create button to confirm
-        self.btn_confirm = Rounded_Button(self, text="Confirm", command=self.confirm_availability, font=c.FONT_BUTTON, bg_colour=c.LIGHT_PRIMARY_ACCENT, hover_colour=c.LIGHT_ACCENT_HOVER, fg_colour="white", width=170, height=42, radius=16, parent_bg=c.LIGHT_BACKGROUND)
+        self.btn_confirm = Rounded_Item(self, text="Confirm", command=self.confirm_availability, font=c.FONT_BUTTON, bg_colour=c.LIGHT_PRIMARY_ACCENT, hover_colour=c.LIGHT_ACCENT_HOVER, fg_colour="white", width=170, height=42, radius=16, parent_bg_colour=c.LIGHT_BACKGROUND)
         self.btn_confirm.pack(pady=15, side="bottom")
         
         #Put back button onto the screen
-        self.btn_back = Rounded_Button(self, text="Back", command=self.return_to_main_screen, font=c.FONT_BUTTON, bg_colour=c.LIGHT_PRIMARY_ACCENT, hover_colour=c.LIGHT_ACCENT_HOVER, fg_colour="white", width=170, height=42, radius=16, parent_bg=c.LIGHT_BACKGROUND)
+        self.btn_back = Rounded_Item(self, text="Back", command=self.return_to_main_screen, font=c.FONT_BUTTON, bg_colour=c.LIGHT_PRIMARY_ACCENT, hover_colour=c.LIGHT_ACCENT_HOVER, fg_colour="white", width=170, height=42, radius=16, parent_bg_colour=c.LIGHT_BACKGROUND)
         self.btn_back.pack(pady=15)
                 
                 

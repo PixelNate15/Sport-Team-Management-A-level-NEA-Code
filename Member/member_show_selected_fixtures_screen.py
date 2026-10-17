@@ -1,6 +1,6 @@
 import constants as c
 from Reusable_Code.main_screen_header_panel import Header_Panel
-from Reusable_Code.Rounded_Items.rounded_button import Rounded_Button
+from Reusable_Code.Rounded_Items.rounded_item import Rounded_Item
 from Reusable_Code.fixture_cards import fixture_cards
 import tkinter as tk
 
@@ -27,7 +27,7 @@ class Member_Show_Selected_Fixtures_Screen(tk.Frame):
                 self.fixture_frame.pack()
                 
         #Put back button onto the screen
-        self.btn_back = Rounded_Button(self, text="Back", command=self.return_to_main_screen, font=c.FONT_BUTTON, bg_colour=c.LIGHT_PRIMARY_ACCENT, hover_colour=c.LIGHT_ACCENT_HOVER, fg_colour="white", width=170, height=42, radius=16, parent_bg=c.LIGHT_BACKGROUND)
+        self.btn_back = Rounded_Item(self, text="Back", command=self.return_to_main_screen, font=c.FONT_BUTTON, bg_colour=c.LIGHT_PRIMARY_ACCENT, hover_colour=c.LIGHT_ACCENT_HOVER, fg_colour="white", width=170, height=42, radius=16, parent_bg_colour=c.LIGHT_BACKGROUND)
         self.btn_back.pack(pady=15)
         
     

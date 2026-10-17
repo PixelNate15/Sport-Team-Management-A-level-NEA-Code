@@ -2,7 +2,7 @@ import constants as c
 from Reusable_Code.main_screen_header_panel import Header_Panel
 from Reusable_Code.draw_graph import draw_graph
 from Reusable_Code.view_player_information import View_Player_Details
-from Reusable_Code.Rounded_Items.rounded_button import Rounded_Button
+from Reusable_Code.Rounded_Items.rounded_item import Rounded_Item
 from System.form_score_calculation import calculate_form_score
 from SQL import get_last_ten_feedback_scores
 import tkinter as tk
@@ -49,7 +49,7 @@ class Captain_Expanded_Player_Card_Screen(tk.Frame):
         draw_graph(self.graph_frame, self.index, self.communications_ratings, "Communications Ratings", "Index", "Communications Rating", row=1, column=1, want_integer_x_axis=True)
         
         #Put back button onto the screen
-        self.btn_back = Rounded_Button(self, text="Back", command=self.return_to_main_screen, font=c.FONT_BUTTON, bg_colour=c.LIGHT_PRIMARY_ACCENT, hover_colour=c.LIGHT_ACCENT_HOVER, fg_colour="white", width=170, height=42, radius=16, parent_bg=c.LIGHT_BACKGROUND)
+        self.btn_back = Rounded_Item(self, text="Back", command=self.return_to_main_screen, font=c.FONT_BUTTON, bg_colour=c.LIGHT_PRIMARY_ACCENT, hover_colour=c.LIGHT_ACCENT_HOVER, fg_colour="white", width=170, height=42, radius=16, parent_bg_colour=c.LIGHT_BACKGROUND)
         self.btn_back.pack(pady=15)
         
         
@@ -98,4 +98,3 @@ class Captain_Expanded_Player_Card_Screen(tk.Frame):
         return indexs
         
 
-            

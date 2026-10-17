@@ -1,6 +1,6 @@
 import constants as c
 from Reusable_Code.main_screen_header_panel import Header_Panel
-from Reusable_Code.Rounded_Items.rounded_button import Rounded_Button
+from Reusable_Code.Rounded_Items.rounded_item import Rounded_Item
 from Reusable_Code.player_cards import player_cards
 from SQL import get_club_id, get_all_players_for_squads_below_ranking
 import tkinter as tk
@@ -28,7 +28,7 @@ class Captain_Show_All_Players_Available_For_Squad(tk.Frame):
         
         self.ent_search = tk.Entry(self.filter_grid, font =c.FONT_ENTRY, bg=c.LIGHT_SIDEBAR, fg=c.LIGHT_PRIMARY_ACCENT, justify="center")
         self.ent_search.grid(row=0, column=0)
-        self.btn_search = Rounded_Button(self.filter_grid, text="Search", command=self.filter_player_cards, font=c.FONT_BUTTON, bg_colour=c.LIGHT_PRIMARY_ACCENT, hover_colour=c.LIGHT_ACCENT_HOVER, fg_colour="white", width=170, height=42, radius=16, parent_bg=c.LIGHT_BACKGROUND)
+        self.btn_search = Rounded_Item(self.filter_grid, text="Search", command=self.filter_player_cards, font=c.FONT_BUTTON, bg_colour=c.LIGHT_PRIMARY_ACCENT, hover_colour=c.LIGHT_ACCENT_HOVER, fg_colour="white", width=170, height=42, radius=16, parent_bg_colour=c.LIGHT_BACKGROUND)
         self.btn_search.grid(row=0, column=1)
         
         #Create player cards for all players in the captains squad ranking and below rankings
@@ -39,7 +39,7 @@ class Captain_Show_All_Players_Available_For_Squad(tk.Frame):
                 
                 
         #Put back button onto the screen
-        self.btn_back = Rounded_Button(self, text="Back", command=self.return_to_main_screen, font=c.FONT_BUTTON, bg_colour=c.LIGHT_PRIMARY_ACCENT, hover_colour=c.LIGHT_ACCENT_HOVER, fg_colour="white", width=170, height=42, radius=16, parent_bg=c.LIGHT_BACKGROUND)
+        self.btn_back = Rounded_Item(self, text="Back", command=self.return_to_main_screen, font=c.FONT_BUTTON, bg_colour=c.LIGHT_PRIMARY_ACCENT, hover_colour=c.LIGHT_ACCENT_HOVER, fg_colour="white", width=170, height=42, radius=16, parent_bg_colour=c.LIGHT_BACKGROUND)
         self.btn_back.pack(pady=15, side="bottom")
         
     

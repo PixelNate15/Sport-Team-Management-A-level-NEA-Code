@@ -1,6 +1,6 @@
 import constants as c
 from Reusable_Code.main_screen_header_panel import Header_Panel
-from Reusable_Code.Rounded_Items.rounded_button import Rounded_Button
+from Reusable_Code.Rounded_Items.rounded_item import Rounded_Item
 from SQL import remove_injury_status, member_update_injury_status, insert_injury_status
 import tkinter as tk
 from tkinter import *
@@ -49,11 +49,11 @@ class Member_Edit_Injury_Status(tk.Frame):
         self.txt_notes.insert("1.0", self.injury["notes"] if self.injury else "")
         
         #Put no injury, submit and back buttons on the screen
-        self.btn_no_injury = Rounded_Button(self, text="No Injury", command=self.clear_injury_status, font=c.FONT_BUTTON, bg_colour=c.LIGHT_PRIMARY_ACCENT, hover_colour=c.LIGHT_ACCENT_HOVER, fg_colour="white", width=170, height=42, radius=16, parent_bg=c.LIGHT_BACKGROUND)
+        self.btn_no_injury = Rounded_Item(self, text="No Injury", command=self.clear_injury_status, font=c.FONT_BUTTON, bg_colour=c.LIGHT_PRIMARY_ACCENT, hover_colour=c.LIGHT_ACCENT_HOVER, fg_colour="white", width=170, height=42, radius=16, parent_bg_colour=c.LIGHT_BACKGROUND)
         self.btn_no_injury.pack(pady=15)
-        self.btn_submit = Rounded_Button(self, text="Submit", command=self.submit_injury_status, font=c.FONT_BUTTON, bg_colour=c.LIGHT_PRIMARY_ACCENT, hover_colour=c.LIGHT_ACCENT_HOVER, fg_colour="white", width=170, height=42, radius=16, parent_bg=c.LIGHT_BACKGROUND)
+        self.btn_submit = Rounded_Item(self, text="Submit", command=self.submit_injury_status, font=c.FONT_BUTTON, bg_colour=c.LIGHT_PRIMARY_ACCENT, hover_colour=c.LIGHT_ACCENT_HOVER, fg_colour="white", width=170, height=42, radius=16, parent_bg_colour=c.LIGHT_BACKGROUND)
         self.btn_submit.pack(pady=15)
-        self.btn_back = Rounded_Button(self, text="Back", command=self.return_to_view_injury_status, font=c.FONT_BUTTON, bg_colour=c.LIGHT_PRIMARY_ACCENT, hover_colour=c.LIGHT_ACCENT_HOVER, fg_colour="white", width=170, height=42, radius=16, parent_bg=c.LIGHT_BACKGROUND)
+        self.btn_back = Rounded_Item(self, text="Back", command=self.return_to_view_injury_status, font=c.FONT_BUTTON, bg_colour=c.LIGHT_PRIMARY_ACCENT, hover_colour=c.LIGHT_ACCENT_HOVER, fg_colour="white", width=170, height=42, radius=16, parent_bg_colour=c.LIGHT_BACKGROUND)
         self.btn_back.pack(pady=15)
         
     

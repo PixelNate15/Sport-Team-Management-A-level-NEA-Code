@@ -1,7 +1,7 @@
 import constants as c
 from Reusable_Code.main_screen_header_panel import Header_Panel
 from Reusable_Code.view_result_information import View_Result_Details
-from Reusable_Code.Rounded_Items.rounded_button import Rounded_Button
+from Reusable_Code.Rounded_Items.rounded_item import Rounded_Item
 from Reusable_Code.feedback_cards import Feedback_Cards
 from SQL import get_partner_feedback_for_one_fixture
 import tkinter as tk
@@ -32,7 +32,7 @@ class Member_Expanded_Result_Card_Screen(tk.Frame):
         self.feedback_frame.pack()
         
         #Put back button onto the screen
-        self.btn_back = Rounded_Button(self, text="Back", command=self.return_to_recent_results_screen, font=c.FONT_BUTTON, bg_colour=c.LIGHT_PRIMARY_ACCENT, hover_colour=c.LIGHT_ACCENT_HOVER, fg_colour="white", width=170, height=42, radius=16, parent_bg=c.LIGHT_BACKGROUND)
+        self.btn_back = Rounded_Item(self, text="Back", command=self.return_to_recent_results_screen, font=c.FONT_BUTTON, bg_colour=c.LIGHT_PRIMARY_ACCENT, hover_colour=c.LIGHT_ACCENT_HOVER, fg_colour="white", width=170, height=42, radius=16, parent_bg_colour=c.LIGHT_BACKGROUND)
         self.btn_back.pack(pady=15)
         
         

@@ -1,6 +1,6 @@
 import constants as c
 from Reusable_Code.main_screen_header_panel import Header_Panel
-from Reusable_Code.Rounded_Items.rounded_button import Rounded_Button
+from Reusable_Code.Rounded_Items.rounded_item import Rounded_Item
 from Reusable_Code.Rounded_Items.rounded_slider import Rounded_Slider
 from SQL import get_partner_info, insert_partner_feedback
 import tkinter as tk
@@ -52,10 +52,10 @@ class Member_Sumbit_Feedback(tk.Frame):
         self.ent_comment.pack(pady=(0,5))
         
         #Create back and submit buttons
-        self.btn_submit = Rounded_Button(self, text="Submit Feedback", command=self.submit_feedback, font=c.FONT_BUTTON, bg_colour=c.LIGHT_PRIMARY_ACCENT, hover_colour=c.LIGHT_ACCENT_HOVER, fg_colour="white", width=170, height=42, radius=16, parent_bg=c.LIGHT_BACKGROUND)
+        self.btn_submit = Rounded_Item(self, text="Submit Feedback", command=self.submit_feedback, font=c.FONT_BUTTON, bg_colour=c.LIGHT_PRIMARY_ACCENT, hover_colour=c.LIGHT_ACCENT_HOVER, fg_colour="white", width=170, height=42, radius=16, parent_bg_colour=c.LIGHT_BACKGROUND)
         self.btn_submit.pack(pady=15)
         
-        self.btn_back = Rounded_Button(self, text="Back", command=self.return_to_required_feedback_screen, font=c.FONT_BUTTON, bg_colour=c.LIGHT_PRIMARY_ACCENT, hover_colour=c.LIGHT_ACCENT_HOVER, fg_colour="white", width=170, height=42, radius=16, parent_bg=c.LIGHT_BACKGROUND)
+        self.btn_back = Rounded_Item(self, text="Back", command=self.return_to_required_feedback_screen, font=c.FONT_BUTTON, bg_colour=c.LIGHT_PRIMARY_ACCENT, hover_colour=c.LIGHT_ACCENT_HOVER, fg_colour="white", width=170, height=42, radius=16, parent_bg_colour=c.LIGHT_BACKGROUND)
         self.btn_back.pack(pady=15)
             
     

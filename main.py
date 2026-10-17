@@ -27,7 +27,7 @@ class App (tk.Tk):
         self.iconbitmap("logo_ico.ico")
         self.title("Sports Team Management")
         self.current_frame = None
-        self.show_main_screen(2)
+        self.show_main_screen(1)
         
         
     #Method to clear the screen of the current frame

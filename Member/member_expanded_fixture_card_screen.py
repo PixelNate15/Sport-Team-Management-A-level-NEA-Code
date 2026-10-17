@@ -2,7 +2,7 @@ import constants as c
 from Reusable_Code.main_screen_header_panel import Header_Panel
 from Reusable_Code.players_selected_for_fixture_table import Team_Selection_Table
 from Reusable_Code.view_fixture_information import View_Fixture_Details
-from Reusable_Code.Rounded_Items.rounded_button import Rounded_Button
+from Reusable_Code.Rounded_Items.rounded_item import Rounded_Item
 import tkinter as tk
 
 
@@ -26,7 +26,7 @@ class Member_Expanded_Fixture_Card_Screen(tk.Frame):
         self.fixture_details.pack(side="top", fill="x")
         
         #Add button to bottom of screen
-        self.btn_back = Rounded_Button(self, text="Back", command=self.return_to_login_screen, font=c.FONT_BUTTON, bg_colour=c.LIGHT_PRIMARY_ACCENT, hover_colour=c.LIGHT_ACCENT_HOVER, fg_colour="white", width=170, height=42, radius=16, parent_bg=c.LIGHT_BACKGROUND)
+        self.btn_back = Rounded_Item(self, text="Back", command=self.return_to_login_screen, font=c.FONT_BUTTON, bg_colour=c.LIGHT_PRIMARY_ACCENT, hover_colour=c.LIGHT_ACCENT_HOVER, fg_colour="white", width=170, height=42, radius=16, parent_bg_colour=c.LIGHT_BACKGROUND)
         self.btn_back.pack(pady=15)
         
     
