@@ -27,6 +27,7 @@ class App (tk.Tk):
         self.iconbitmap("logo_ico.ico")
         self.title("Sports Team Management")
         self.current_frame = None
+        self.current_frame_name = "login"
         self.show_main_screen(2)
         
         
@@ -40,6 +41,7 @@ class App (tk.Tk):
     def show_login_screen(self):
         self.clear_screen()
         self.geometry("550x400")
+        
         self.current_frame = Login_Screen(self, self)
         self.current_frame.pack(fill="both", expand="true")
 
@@ -49,6 +51,7 @@ class App (tk.Tk):
         self.clear_screen()
         self.geometry("550x740")
 
+        self.current_frame_name = "create_account"
         self.current_frame = Create_Account_Screen(self, self)
         self.current_frame.pack(fill="both", expand="true")
 
@@ -59,11 +62,16 @@ class App (tk.Tk):
         self.geometry("800x768")
 
         self.is_captain = check_is_captain(user_id)
+        if self.current_frame_name == "login" or self.current_frame_name == "create_account":
+            self.current_view = None
+            self.current_frame_name = None
 
-        if self.is_captain == False:
+        if self.is_captain == False or self.current_view == "member":
+            self.current_view = "member"
             self.current_frame = Member_Main_Screen(self, self, user_id)
             self.current_frame.pack(fill="both", expand="true")
         else:
+            self.current_view = "captain"
             self.current_frame = Captain_Main_Screen(self, self, user_id)
             self.current_frame.pack(fill="both", expand="true")
             

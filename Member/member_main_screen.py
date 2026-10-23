@@ -25,6 +25,10 @@ class Member_Main_Screen(tk.Frame):
             ("Give Partner Feedback", self.open_give_partner_feedback),
             ("Recent Results", self.open_recent_results)
         ]
+        
+        if self.app.is_captain == True:
+            self.buttons.append(("Captain View", self.return_captain_to_home_screen))
+        
         #Put sidebar on screen
         self.sidebar = main_screen_sidebar(self, self.buttons)
         self.sidebar.pack(side="left", fill="y")
@@ -72,3 +76,9 @@ class Member_Main_Screen(tk.Frame):
     #Method to open the recent results screen
     def open_recent_results(self):
         self.app.show_recent_results(self.user_id)
+        
+        
+    #Method to return the captain to their home screen
+    def return_captain_to_home_screen(self):
+        self.app.current_view = "captain"
+        self.app.show_main_screen(self.user_id)

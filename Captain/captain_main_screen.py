@@ -52,4 +52,5 @@ class Captain_Main_Screen(tk.Frame):
     
     #Method to open the my player view screen
     def open_my_player_view(self):
-        pass
+        self.app.current_view = "member"
+        self.app.show_main_screen(self.user_id)
