@@ -1,9 +1,10 @@
 1. make it so if a player has a current injury but can still play, they are the lst resort for the system, ie. they are not included in the list of avaaiilable players unless there isnt enough players
 2. create rounded entrys, which are scrollable
-3. make more validation for the inputs, mainly create account
+3. make more validation for SQL
 4. remove the team graphs
 5. add manage fixtures for captain
 6. add my player view for captain
 7. fix injury status screen
 8. implement rounded buttons for the login/create account screen
 9. make frames scrollable
+10. combine all the view_..._information modules into 1

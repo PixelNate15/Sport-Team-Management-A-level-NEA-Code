@@ -27,7 +27,7 @@ class App (tk.Tk):
         self.iconbitmap("logo_ico.ico")
         self.title("Sports Team Management")
         self.current_frame = None
-        self.show_main_screen(1)
+        self.show_main_screen(2)
         
         
     #Method to clear the screen of the current frame
@@ -69,24 +69,23 @@ class App (tk.Tk):
             
     
     #Method to show the availability screen for the member
-    def show_member_availability_screen(self, user_id, fixtures):
+    def show_member_availability_screen(self, user_id):
         self.clear_screen()
-        self.geometry("550x675")
+        self.geometry("550x775")
         
-        self.current_frame = Member_Availability_Screen(self, self, user_id, fixtures)
+        self.current_frame = Member_Availability_Screen(self, self, user_id)
         self.current_frame.pack(fill="both", expand="true")
         
         
     #Method to show the select availability screen for the member
-    def show_member_select_availability_screen(self, user_id, fixture, fixtures):
+    def show_member_select_availability_screen(self, user_id, fixture, filter):
         self.clear_screen()
         self.geometry("550x450")
         
-        self.current_frame = Member_Select_Availability_Screen(self, self, user_id, fixture, fixtures)
+        self.current_frame = Member_Select_Availability_Screen(self, self, user_id, fixture, filter)
         self.current_frame.pack(fill="both", expand="true")
         
-        
-        
+         
     #Method to show the view fixture information screen
     def show_expanded_fixture(self, user_id, fixture):
         self.clear_screen()

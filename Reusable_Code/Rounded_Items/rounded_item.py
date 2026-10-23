@@ -19,13 +19,14 @@ class Rounded_Item(tk.Frame):
         #If button text is inputted, a button is created else a frame is created
         self.content = None
         if text is not None:
-            self.canvas.create_text(width / 2, height / 2, text=text, font=font, fill=fg_colour, width=width - 20)
+            self.text_id = self.canvas.create_text(width / 2, height / 2, text=text, font=font, fill=fg_colour, width=width - 20, justify="center", anchor="center")
         else:
             self.content = tk.Frame(self.canvas, bg=bg_colour)
             self.canvas.create_window(width / 2, height / 2, window=self.content, width=width - 20)
 
         self.set_colour(bg_colour)
         self.bind_children()
+
 
     #Draw the rounded shape and change its colour
     def set_colour(self, colour):
@@ -36,6 +37,7 @@ class Rounded_Item(tk.Frame):
         if self.content is not None:
             self._colour_children(self.content, colour)
 
+
     #Change the background of widgets inside a card
     def _colour_children(self, widget, colour):
         try:
@@ -45,6 +47,7 @@ class Rounded_Item(tk.Frame):
 
         for child in widget.winfo_children():
             self._colour_children(child, colour)
+
 
     #Make the button/card and its child widgets clickable and hoverable
     def bind_children(self):
@@ -59,3 +62,8 @@ class Rounded_Item(tk.Frame):
                 bind(child)
 
         bind(self)
+        
+    
+    #Method to change the text of a button
+    def configure_button_text(self, new_text):
+        self.canvas.itemconfig(self.text_id, text=new_text)

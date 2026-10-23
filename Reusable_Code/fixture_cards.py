@@ -11,13 +11,14 @@ class fixture_cards(tk.Frame):
         self.on_click = on_click
         
         #Loop to go through every fixture and create its card
-        for fixture in fixtures:
-            if (want_colour_change_background):
+        if (want_colour_change_background):    
+            for fixture in fixtures:
                 if fixture["is_selected"] == True:
                     self.create_card_frame(fixture, c.LIGHT_SUCCESS, c.LIGHT_SUCCESS_HOVER)
                 else:
                     self.create_card_frame(fixture, c.LIGHT_SIDEBAR, c.LIGHT_SIDEBAR_HOVER)
-            else:
+        else:
+            for fixture in fixtures:
                 self.create_card_frame(fixture, c.LIGHT_SIDEBAR, c.LIGHT_SIDEBAR_HOVER)
             
     
@@ -35,5 +36,5 @@ class fixture_cards(tk.Frame):
         lbl_bottom = tk.Label(card.content, text=bottom_sentence, font=c.FONT_LABEL, bg=bg_colour, fg="black")
         lbl_bottom.pack()
         
-        #Include the labels added after the rounded item was constructed.
+        #Includes the labels added after the rounded item was constructed
         card.bind_children()

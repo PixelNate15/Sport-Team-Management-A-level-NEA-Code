@@ -18,7 +18,6 @@ class Captain_Main_Screen(tk.Frame):
         #Create buttons for sidebar
         self.buttons = [
             ("Manage Fixtures", self.open_manage_fixtures),
-            ("Team Graphs", self.open_team_graphs),
             ("All Members", self.open_all_members),
             ("My Player View", self.open_my_player_view)
         ]
@@ -45,12 +44,7 @@ class Captain_Main_Screen(tk.Frame):
     def open_manage_fixtures(self):
         pass
     
-    
-    #Method to open the team graphs screen
-    def open_team_graphs(self):
-        pass
-    
-    
+
     #Method to open the all members screen
     def open_all_members(self):
         self.app.show_all_players_available_for_squad(self.user_id)

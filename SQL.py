@@ -14,14 +14,14 @@ def format_time(td):
 #Function to connect to the database
 def connect_database():
     try:
-        myIP = getHomeIP()
+        #myIP = getHomeIP()
         username = "alevel_user"
         password = "b6ZMUxyMrEdPU1oSjJfLRFBvTOVJWH7h"
         # myIP = "localhost"
         # username = "root"
         # password = ""
         connection = mysql.connector.connect(
-            host=myIP,
+            host="90.217.20.215",
             user=username,
             password=password,
             database="alevel_app"
@@ -154,8 +154,8 @@ def check_is_captain(user_id: int) -> bool:
     return bool(result[0])
 
 
-#Function to get all fixtures for a user for the team that they are involved in - requires user_id
-def get_fixtures(user_id: int) -> list[dict]:
+#Function to get all fixtures for a user for the team that they are involved in - requires user_id and an option variable of availability_filter
+def get_fixtures(user_id: int, availability_filter: bool | None = None) -> list[dict]:
     connection = connect_database()
     cursor = connection.cursor()
     
@@ -167,8 +167,29 @@ def get_fixtures(user_id: int) -> list[dict]:
         LEFT JOIN team_selection ts ON ts.fixture_id = f.fixture_id
         LEFT JOIN team_selection_players tsp ON tsp.team_selection_id = ts.team_selection_id AND tsp.user_id = %s
         WHERE sp.user_id = %s AND f.date >= CURDATE()
-        ORDER BY f.date ASC, f.start_time ASC
     """
+    
+    #Adds a filter so that only fixtures the user already stated their availability are retrieved
+    if availability_filter == True:
+        sql = sql + """
+        AND EXISTS(
+        SELECT 1
+        FROM availability a
+        WHERE a.fixture_id = f.fixture_id AND a.user_id = sp.user_id)
+        """
+    
+    #Adds a filter so that only fixture the user have not stated their availability are retrieved
+    if availability_filter == False:
+            sql = sql + """
+            AND NOT EXISTS(
+            SELECT 1
+            FROM availability a
+            WHERE a.fixture_id = f.fixture_id AND a.user_id = sp.user_id)
+            """   
+    
+    #Orders the fixtures by date in ascending order
+    sql = sql + "ORDER BY f.date ASC, f.start_time ASC"
+    
     values = (user_id, user_id)
     
     cursor.execute(sql, values)
@@ -194,7 +215,35 @@ def get_fixtures(user_id: int) -> list[dict]:
     return fixtures
 
 
-#Function to insert the availability of a member for a fixture - requires fixture_id,  user_id, is_available and an optional variable of reason
+#Functon to get the availiability of a fixture for a user which has already submitted their availability, requires user_id and fixture_id
+def get_availability_details(user_id: int, fixture_id: int) -> dict:
+    connection = connect_database()
+    cursor = connection.cursor()
+    
+    sql = """
+        SELECT availability_id, is_available, reason
+        FROM availability
+        WHERE user_id = %s and fixture_id = %s
+    """
+    
+    values = (user_id, fixture_id)
+    
+    cursor.execute(sql, values)
+    results = cursor.fetchone()
+    
+    cursor.close()
+    connection.close()
+        
+    details = {
+        "availability_id": results[0],
+        "is_available": results[1],
+        "reason": results [2]
+    }
+    
+    return details
+        
+
+#Function to insert the availability of a member for a fixture - requires fixture_id, user_id, is_available and an optional variable of reason
 def insert_availability_details(fixture_id: int, user_id: int, is_available: bool, reason: str | None = None) -> None:
     connection = connect_database()
     cursor = connection.cursor()
@@ -212,6 +261,35 @@ def insert_availability_details(fixture_id: int, user_id: int, is_available: boo
     
     cursor.close()
     connection.close()
+    
+    
+#Function to update the availability for a fixture - requires availability_id, is_available and an optional variable of reason
+def update_availability_details(availability_id: int, is_available: bool, reason: str | None = None) -> None:
+    connection = connect_database()
+    cursor = connection.cursor()
+    
+    if reason != None:
+        sql = """
+            UPDATE availability
+            SET is_available = %s, reason = %s
+            WHERE availability_id = %s
+        """
+        values = (is_available, reason, availability_id)
+        
+    else:
+        sql = """
+            UPDATE availability
+            SET is_available = %s, reason = NULL
+            WHERE availability_id = %s
+            """
+        values = (is_available, availability_id)
+    
+    cursor.execute(sql, values)
+    connection.commit()
+    
+    cursor.close()
+    connection.close()
+    
     
     
 #Function to get the pair and players for a fixture - requires fixture_id

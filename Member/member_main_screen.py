@@ -5,6 +5,7 @@ from Reusable_Code.fixture_cards import fixture_cards
 from SQL import get_fixtures
 import tkinter as tk
 
+
 class Member_Main_Screen(tk.Frame):
     def __init__(self, parent, app, user_id):
         super().__init__(parent, bg=c.LIGHT_BACKGROUND)
@@ -38,9 +39,9 @@ class Member_Main_Screen(tk.Frame):
         self.fixture_frame.pack()
         
        
-    #Method to open the availability screen and close the main screen    
+    #Method to open the availability screen   
     def open_availability(self):
-        self.app.show_member_availability_screen(self.user_id, self.fixtures)
+        self.app.show_member_availability_screen(self.user_id)
         
         
     #Method to expand fixture card to view more details

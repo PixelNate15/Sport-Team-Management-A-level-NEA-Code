@@ -17,6 +17,7 @@ class View_Fixture_Details(tk.Frame):
             ("Notes", self.fixture["notes"])
         ]
         
+        
         #Loop creating a "grid" of labels from rows
         for row_index, (title, value) in enumerate(rows):
             lbl_title = tk.Label(self, text=title, font=c.FONT_LABEL_BOLD, fg=c.LIGHT_SECONDARY_TEXT, bg=c.LIGHT_BACKGROUND, anchor="w")

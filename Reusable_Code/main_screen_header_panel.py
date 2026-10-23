@@ -1,7 +1,7 @@
 import tkinter as tk
 import constants as c
 
-#Class that can be imported in the main screen files which create the header bar
+#Class that can be imported in the screen files so an indentical header can be created on each screen without any dupliate code
 class Header_Panel(tk.Frame):
     def __init__(self, parent):
         super().__init__(parent, bg=c.LIGHT_PRIMARY_ACCENT, height=80)
