@@ -1,5 +1,4 @@
 import tkinter as tk
-from Member.member_show_selected_fixtures_screen import Member_Show_Selected_Fixtures_Screen
 import constants as c
 from SQL import check_is_captain
 from login_screen import Login_Screen
@@ -8,6 +7,7 @@ from Member.member_main_screen import Member_Main_Screen
 from Member.member_availability_screen import Member_Availability_Screen
 from Member.member_select_availability_screen import Member_Select_Availability_Screen
 from Member.member_expanded_fixture_card_screen import Member_Expanded_Fixture_Card_Screen
+from Member.member_show_selected_fixtures_screen import Member_Show_Selected_Fixtures_Screen
 from Member.member_show_recent_results_screen import Member_Show_Recent_Results
 from Member.member_expanded_result_card_screen import Member_Expanded_Result_Card_Screen
 from Member.member_show_recent_partner_feedback import Member_Recent_Partner_Feedback
@@ -151,7 +151,7 @@ class App (tk.Tk):
     #Method to show the submit partner feedback screen
     def show_submit_partner_feedback(self, user_id, result):
         self.clear_screen()
-        self.geometry("550x650")
+        self.geometry("550x820")
         
         self.current_frame = Member_Sumbit_Feedback(self, self, user_id, result)
         self.current_frame.pack(fill="both", expand="true")
@@ -169,7 +169,7 @@ class App (tk.Tk):
     #Method to show submit injury status screen
     def show_submit_injury_status(self, user_id, injury):
         self.clear_screen()
-        self.geometry("550x650")
+        self.geometry("550x720")
         
         self.current_frame = Member_Edit_Injury_Status(self, self, user_id, injury)
         self.current_frame.pack(fill="both", expand="true")

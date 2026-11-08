@@ -1,6 +1,8 @@
 import mysql.connector
 from home_ip import getHomeIP
 
+
+
 USER_COLUMNS = []
 USER_DATA = []
 

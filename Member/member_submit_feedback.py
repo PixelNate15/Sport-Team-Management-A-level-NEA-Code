@@ -87,6 +87,7 @@ class Member_Sumbit_Feedback(tk.Frame):
         self.comment = self.ent_comment.get().strip()
         if self.comment:
             insert_partner_feedback(self.result["match_id"], self.user_id, self.partner["user_id"], self.overall_score, self.key_moments_score, self.communication_score, self.comment)
+            messagebox.showinfo(message="Feedback Successfully Submitted", title="Feedback Submitted")
             self.app.show_required_partner_feedback(self.user_id)
         else:
             messagebox.showinfo(message="Please write a comment", title="Submit Feedback Error")

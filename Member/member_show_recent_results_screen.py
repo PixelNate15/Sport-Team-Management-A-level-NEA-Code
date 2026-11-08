@@ -35,6 +35,6 @@ class Member_Show_Recent_Results(tk.Frame):
         self.app.show_expanded_result(self.user_id, result)
         
 
-    #Method to return to login screen
+    #Method to return to main screen
     def return_to_main_screen(self):
         self.app.show_main_screen(self.user_id)

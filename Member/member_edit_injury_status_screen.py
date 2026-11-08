@@ -1,7 +1,7 @@
 import constants as c
 from Reusable_Code.main_screen_header_panel import Header_Panel
 from Reusable_Code.Rounded_Items.rounded_item import Rounded_Item
-from SQL import remove_injury_status, member_update_injury_status, insert_injury_status
+from SQL import remove_injury_status, update_injury_status, insert_injury_status
 import tkinter as tk
 from tkinter import *
 from tkcalendar import DateEntry
@@ -63,6 +63,7 @@ class Member_Edit_Injury_Status(tk.Frame):
             messagebox.showinfo(message="Already no injury", title="No Injury")
             return
         remove_injury_status(self.injury["injury_id"])
+        messagebox.showinfo(message="Injury Removed", title="Injury")
         self.return_to_view_injury_status()
        
         
@@ -71,19 +72,25 @@ class Member_Edit_Injury_Status(tk.Frame):
         self.description = self.ent_injury.get().strip()
         self.expected_return_date = self.ent_expected_return_date.get_date()
         self.notes = self.txt_notes.get("1.0", tk.END).strip()
-        if self.description and self.expected_return_date >= date.today() and self.notes:
-            if self.injury:
-                member_update_injury_status(self.injury["injury_id"], self.description, self.expected_return_date, self.can_play.get(), self.notes)
-                messagebox.showinfo(message="Injury Status Updated", title="Injury Status")
-                self.return_to_view_injury_status()
-                return
-            insert_injury_status(self.user_id, self.description, self.expected_return_date, self.can_play.get(), self.notes)
-            messagebox.showinfo(message="Injury Status Added", title="Injury Status")
-            self.return_to_view_injury_status()
-            return
+        if self.description:
+            if self.expected_return_date > date.today():
+                if self.notes:
+                    if self.injury:
+                        update_injury_status(self.injury["injury_id"], self.description, self.expected_return_date, self.can_play.get(), self.notes)
+                        messagebox.showinfo(message="Injury Status Updated", title="Injury Status")
+                        self.return_to_view_injury_status()
+                        return
+                    insert_injury_status(self.user_id, self.description, self.expected_return_date, self.can_play.get(), self.notes)
+                    messagebox.showinfo(message="Injury Status Added", title="Injury Status")
+                    self.return_to_view_injury_status()
+                    return
+                else:
+                    messagebox.showinfo(message="Please add notes about your injury", title="Missing Notes")
+            else:
+                messagebox.showinfo(message="Please change the date so it's in the future", title="Missing Date")
         else:
-            messagebox.showinfo(message="Please fully fill in the fields", title="Missing Data")
+            messagebox.showinfo(message="Please add a description about the injury", title="Missing Details")
         
-    #Method to return to login screen
+    #Method to return to view injury status screen
     def return_to_view_injury_status(self):
         self.app.show_view_injury_status(self.user_id)

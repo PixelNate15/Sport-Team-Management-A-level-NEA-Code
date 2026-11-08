@@ -28,6 +28,3 @@ class Feedback_Cards(tk.Frame):
         
         lbl_comment = tk.Label(card.content, text=feedback["comments"], font=c.FONT_LABEL, bg=c.LIGHT_SIDEBAR, fg="black")
         lbl_comment.pack()
-
-        #Include the labels added after the rounded item was constructed.
-        card.bind_children()

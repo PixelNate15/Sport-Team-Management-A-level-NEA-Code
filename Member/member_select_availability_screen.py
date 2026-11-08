@@ -46,15 +46,15 @@ class Member_Select_Availability_Screen(tk.Frame):
         self.btn_confirm.pack(pady=15)
         
         #Put back button onto the screen
-        self.btn_back = Rounded_Item(self, text="Back", command=self.return_to_main_screen, font=c.FONT_BUTTON, bg_colour=c.LIGHT_PRIMARY_ACCENT, hover_colour=c.LIGHT_ACCENT_HOVER, fg_colour="white", width=170, height=42, radius=16, parent_bg_colour=c.LIGHT_BACKGROUND)
+        self.btn_back = Rounded_Item(self, text="Back", command=self.return_to_availability_screen, font=c.FONT_BUTTON, bg_colour=c.LIGHT_PRIMARY_ACCENT, hover_colour=c.LIGHT_ACCENT_HOVER, fg_colour="white", width=170, height=42, radius=16, parent_bg_colour=c.LIGHT_BACKGROUND)
         self.btn_back.pack(pady=15)
         
         if self.available_value == 0:
             self.toggle_reason_field()
             
                 
-    #Method to return to the recent_results_screen
-    def return_to_main_screen(self):
+    #Method to return to the availability screen
+    def return_to_availability_screen(self):
         self.app.show_member_availability_screen(self.user_id)
         
     
@@ -74,9 +74,11 @@ class Member_Select_Availability_Screen(tk.Frame):
         self.reason = self.ent_reason.get().strip() if self.ent_reason.get().strip() != "" else None
         if self.filter and ((self.reason and self.is_available.get() == 0) or self.is_available.get() == 1):
             update_availability_details(self.details["availability_id"], self.is_available.get(), self.reason)
+            messagebox.showinfo(message="Availability Updated", title="Availability")
             self.app.show_member_availability_screen(self.user_id)
         elif (self.reason and self.is_available.get() == 0) or self.is_available.get() == 1:
             insert_availability_details(self.fixture["fixture_id"], self.user_id, self.is_available.get(), self.reason)
+            messagebox.showinfo(message="Availability Added", title="Availability")
             self.app.show_member_availability_screen(self.user_id)
         else:
             messagebox.showinfo(message="A reason for being unavailable is required, please enter one", title="Confirming Availavility Error")

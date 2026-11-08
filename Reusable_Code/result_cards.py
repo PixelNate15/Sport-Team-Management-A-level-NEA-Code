@@ -46,5 +46,5 @@ class result_cards(tk.Frame):
         lbl_bottom = tk.Label(card.content, text=bottom_sentence, font=c.FONT_LABEL, bg=bg_colour, fg="black")
         lbl_bottom.pack()
         
-        #Include the labels added after the rounded item was constructed.
+        #Include the labels added after the rounded item was constructed
         card.bind_children()

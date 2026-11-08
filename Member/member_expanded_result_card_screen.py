@@ -22,14 +22,14 @@ class Member_Expanded_Result_Card_Screen(tk.Frame):
         self.result_details = View_Result_Details(self, result)
         self.result_details.pack(side="top", fill="x")
         
-        #Label to put the partnerfeedback they recieved for that match
-        self.lbl_partnerfeedback = tk.Label(self, text="Partner Feedback", font=c.FONT_HEADING, fg=c.LIGHT_MAIN_TEXT, bg=c.LIGHT_BACKGROUND, justify="right")
-        self.lbl_partnerfeedback.pack(pady=(10,0))
-        
-        #Put partner feedback card onto the screen
+        #If there is partner feedback, it will be put on the screen here
         self.feedback = get_partner_feedback_for_one_fixture(result["fixture_id"], self.user_id)
-        self.feedback_frame = Feedback_Cards(self, self.feedback)
-        self.feedback_frame.pack()
+        if self.feedback:
+            self.lbl_partnerfeedback = tk.Label(self, text="Partner Feedback", font=c.FONT_HEADING, fg=c.LIGHT_MAIN_TEXT, bg=c.LIGHT_BACKGROUND, justify="right")
+            self.lbl_partnerfeedback.pack(pady=(10,0))
+
+            self.feedback_frame = Feedback_Cards(self, self.feedback)
+            self.feedback_frame.pack()
         
         #Put back button onto the screen
         self.btn_back = Rounded_Item(self, text="Back", command=self.return_to_recent_results_screen, font=c.FONT_BUTTON, bg_colour=c.LIGHT_PRIMARY_ACCENT, hover_colour=c.LIGHT_ACCENT_HOVER, fg_colour="white", width=170, height=42, radius=16, parent_bg_colour=c.LIGHT_BACKGROUND)

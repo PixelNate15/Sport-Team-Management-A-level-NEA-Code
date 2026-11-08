@@ -1,10 +1,9 @@
-1. make it so if a player has a current injury but can still play, they are the lst resort for the system, ie. they are not included in the list of avaaiilable players unless there isnt enough players
-2. create rounded entrys, which are scrollable
-3. make more validation for SQL
-4. remove the team graphs
-5. add manage fixtures for captain
-6. add my player view for captain
-7. fix injury status screen
-8. implement rounded buttons for the login/create account screen
-9. make frames scrollable
-10. combine all the view_..._information modules into 1
+make it so if a player has a current injury but can still play, they are the lst resort for the system, ie. they are not included in the list of avaaiilable players unless there isnt enough players
+create rounded entrys, which are scrollable
+make more validation for SQL
+add manage fixtures for captain
+implement rounded buttons for the login/create account screen
+make frames scrollable
+combine all the view_..._information modules into 1
+think about making widgets in the percentage of total screen width position instead of hard set so when screens are expanded the proportions are the same
+change the form score algorithm so that the form of the partner is generated inside the algorithm using the date ofthe match as the before date, meaning partenr id must be retreived instead of the form

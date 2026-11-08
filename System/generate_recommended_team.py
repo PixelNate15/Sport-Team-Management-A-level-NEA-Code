@@ -6,13 +6,21 @@ from SQL import get_all_available_players, count_partnership_matches
 #Main function that will return the pairings
 def generate_recommended_team(fixture_id):
     players = get_all_available_players(fixture_id)
-    if players is not None:
-        for player in players:
-            player["form_score"] = calculate_form_score(player["user_id"])
-    else:
+    if players is None:
         return None
+    
+    #Checks to see if there are enough players for the amount of pairs required
+    if len(players) < c.PAIRS_PER_TEAM * 2:
+        return None
+    
+    for player in players:
+        player["form_score"] = calculate_form_score(player["user_id"])
 
     sorted_players = sorted(players, key=lambda player: (player["form_score"] is not None, player["form_score"]), reverse=True)
+    
+    #Checks that the top player has a form
+    if sorted_players[0]["form_score"] is None:
+        return None
     
     return create_pairings(sorted_players, [])
     
@@ -26,25 +34,22 @@ def create_pairings(remaining_players, recommended_team):
         return recommended_team
     
     player_1 = remaining_players[0]
+    player_2 = remaining_players[1]
     close_players = []
     
-    for player in remaining_players[1:]:
-        if player["form_score"] is None:
-            continue
-        if player_1["form_score"] is None:
-            continue
-        
-        difference = abs(player_1["form_score"] - player["form_score"])
-        if difference <= c.FORM_THRESHOLD:
-            close_players.append(player)
+    if player_2["form_score"] is not None:
+        for player in remaining_players[1:]:
+            if player["form_score"] is None:
+                continue
+            difference = abs(player_2["form_score"] - player["form_score"])
+            if difference <= c.FORM_THRESHOLD:
+                close_players.append(player)
             
     if close_players:
         partner = choose_best_partner(player_1, close_players)
     else:
         partner = remaining_players[1]
-    
     recommended_team.append((player_1, partner))
-    
     
     new_remaining_players = []
     for player in remaining_players:
@@ -66,3 +71,4 @@ def choose_best_partner(player, possible_partners):
             best_partner = partner
             
     return best_partner
+

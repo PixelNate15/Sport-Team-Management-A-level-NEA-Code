@@ -31,7 +31,7 @@ class Member_Availability_Screen(tk.Frame):
         self.btn_filter.pack(pady=15)
         
         #Add button to bottom of screen
-        self.btn_back = Rounded_Item(self, text="Back", command=self.return_to_login_screen, font=c.FONT_BUTTON, bg_colour=c.LIGHT_PRIMARY_ACCENT, hover_colour=c.LIGHT_ACCENT_HOVER, fg_colour="white", width=170, height=42, radius=16, parent_bg_colour=c.LIGHT_BACKGROUND)
+        self.btn_back = Rounded_Item(self, text="Back", command=self.return_to_main_screen, font=c.FONT_BUTTON, bg_colour=c.LIGHT_PRIMARY_ACCENT, hover_colour=c.LIGHT_ACCENT_HOVER, fg_colour="white", width=170, height=42, radius=16, parent_bg_colour=c.LIGHT_BACKGROUND)
         self.btn_back.pack(pady=15)
         
     
@@ -40,8 +40,8 @@ class Member_Availability_Screen(tk.Frame):
         self.app.show_member_select_availability_screen(self.user_id, fixture, self.filter)
         
 
-    #Method to return to login screen
-    def return_to_login_screen(self):
+    #Method to return to the main screen
+    def return_to_main_screen(self):
         self.app.show_main_screen(self.user_id)
         
         

@@ -36,6 +36,6 @@ class Member_Show_Selected_Fixtures_Screen(tk.Frame):
         self.app.show_expanded_fixture(self.user_id, fixture)
         
         
-    #Method to return to login screen
+    #Method to return to main screen
     def return_to_main_screen(self):
         self.app.show_main_screen(self.user_id)
