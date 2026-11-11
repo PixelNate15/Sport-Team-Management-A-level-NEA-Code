@@ -53,7 +53,7 @@ class Captain_Expanded_Player_Card_Screen(tk.Frame):
         self.btn_back.pack(pady=15)
         
         
-    #Method to return to the recent_results_screen
+    #Method to return to the main screen
     def return_to_main_screen(self):
         self.app.show_main_screen(self.user_id)
         

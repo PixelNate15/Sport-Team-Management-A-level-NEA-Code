@@ -750,6 +750,7 @@ def get_players_in_one_squad(user_id: int) -> list[dict]:
 
         cursor.execute(sql, value)
         results = cursor.fetchall()
+        
         cursor.close()
         connection.close()
 
@@ -976,7 +977,7 @@ def get_all_players_for_squads_below_ranking(user_id: int, club_id: int) -> list
             LEFT JOIN fixture f ON f.fixture_id = m.fixture_id
             LEFT JOIN season s ON s.season_id = f.season_id
             LEFT JOIN injury i ON i.user_id = u.user_id AND i.is_current = 1
-            WHERE sq.squad_ranking >= (
+            WHERE sq.squad_ranking > (
                 SELECT sq2.squad_ranking
                 FROM squad_players sp2
                 JOIN squad sq2 ON sq2.squad_id = sp2.squad_id
@@ -1041,6 +1042,33 @@ def get_club_id(user_id: int) -> int:
         connection.close()
 
         return results[0]
+    except ConnectionError:
+        print("ERROR: Could not connect to database")
+
+    except mysql.connector.Error as err:
+        print(f"ERROR: SQL query failed: {err}")
+        
+        
+#Function to add a player to the captain's squad - requires captain_id and player_id
+def add_player_to_squad(captain_id: int, player_id: int) -> None:
+    try:
+        connection = connect_database()
+        cursor = connection.cursor()
+
+        sql = """
+            UPDATE squad_players sp
+            JOIN squad_players cap ON cap.user_id = %s
+            SET sp.squad_id = cap.squad_id
+            WHERE sp.user_id = %s
+        """
+
+        values = (captain_id, player_id)
+
+        cursor.execute(sql, values)
+        connection.commit()
+
+        cursor.close()
+        connection.close()
     except ConnectionError:
         print("ERROR: Could not connect to database")
 

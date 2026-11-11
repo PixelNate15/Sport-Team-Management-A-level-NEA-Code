@@ -38,6 +38,13 @@ class Rounded_Item(tk.Frame):
             self._colour_children(self.content, colour)
 
 
+    #Method to change the colour the bg colour of a card
+    def change_colour(self, bg_colour, hover_colour):
+        self.bg_colour = bg_colour
+        self.hover_colour = hover_colour
+        self.set_colour(self.hover_colour)
+
+
     #Change the background of widgets inside a card
     def _colour_children(self, widget, colour):
         try:

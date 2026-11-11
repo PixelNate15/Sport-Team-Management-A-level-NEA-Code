@@ -1,9 +1,5 @@
-make it so if a player has a current injury but can still play, they are the lst resort for the system, ie. they are not included in the list of avaaiilable players unless there isnt enough players
-create rounded entrys, which are scrollable
-make more validation for SQL
-add manage fixtures for captain
 implement rounded buttons for the login/create account screen
 make frames scrollable
-combine all the view_..._information modules into 1
-think about making widgets in the percentage of total screen width position instead of hard set so when screens are expanded the proportions are the same
-change the form score algorithm so that the form of the partner is generated inside the algorithm using the date ofthe match as the before date, meaning partenr id must be retreived instead of the form
+change the form score algorithm so that the form of the p
+split SQL file into different files for different purposes
+feedback from P5

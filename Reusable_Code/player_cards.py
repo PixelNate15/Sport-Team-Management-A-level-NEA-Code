@@ -4,11 +4,13 @@ from Reusable_Code.Rounded_Items.rounded_item import Rounded_Item
 
 
 class player_cards(tk.Frame):
-    def __init__(self, parent, players, on_click, want_grid=False):
+    def __init__(self, parent, players, on_click, want_grid=False, selected_ids=None):
         super().__init__(parent, background=c.LIGHT_BACKGROUND)
         
         self.on_click = on_click
         self.want_grid = want_grid
+        self.selected_ids = selected_ids if selected_ids is not None else []
+        self.cards = {}
         
         if self.want_grid:
             self.grid_columnconfigure(0, weight=1)
@@ -22,7 +24,11 @@ class player_cards(tk.Frame):
             else:
                 row = None
                 column = None
-            self.create_card_frame(player, c.LIGHT_SIDEBAR, c.LIGHT_SIDEBAR_HOVER, row, column)
+                
+            if player["user_id"] in self.selected_ids:
+                self.create_card_frame(player, c.LIGHT_SUCCESS, c.LIGHT_SUCCESS_HOVER, row, column)
+            else:
+                self.create_card_frame(player, c.LIGHT_SIDEBAR, c.LIGHT_SIDEBAR_HOVER, row, column)
             
     
     #Method to create a fixture card         
@@ -35,6 +41,7 @@ class player_cards(tk.Frame):
         ]
         
         card = Rounded_Item(self, width=500, height=70, radius=16, bg_colour=bg_colour, parent_bg_colour=c.LIGHT_BACKGROUND, hover_colour=hover_colour, command=lambda p=player: self.on_click(p))
+        self.cards[player["user_id"]] = card
         if self.want_grid == True:
             card.grid(row=row, column=column, padx=10, pady=5, sticky="nsew")
         else:    
@@ -44,7 +51,7 @@ class player_cards(tk.Frame):
         avatar_size = 54
         avatar_canvas = tk.Canvas(card.content, width=avatar_size, height=avatar_size, bg=bg_colour, highlightthickness=0)
         avatar_canvas.pack(side="left", padx=(10, 15))
-        avatar_canvas.create_oval(2, 2, avatar_size - 2, avatar_size - 2, outline=c.LIGHT_MAIN_TEXT, width=2, fill=bg_colour, tags="avatar_background")
+        avatar_canvas.create_oval(2, 2, avatar_size - 2, avatar_size - 2, outline=c.LIGHT_MAIN_TEXT, width=2, fill="", tags="avatar_background")
         avatar_canvas.create_text(avatar_size / 2, avatar_size / 2, text=initials, font=c.FONT_HEADING, fill=c.LIGHT_MAIN_TEXT)
         
         #Create label for name
@@ -60,3 +67,13 @@ class player_cards(tk.Frame):
         
         #Include the widgets added after the rounded item was constructed.
         card.bind_children()
+        
+    #Method to change the background of a card
+    def change_colour(self, user_id, is_selected):
+        card = self.cards.get(user_id)
+        if card is None:
+            return
+        if is_selected:
+            card.change_colour(c.LIGHT_SUCCESS, c.LIGHT_SUCCESS_HOVER)
+        else:
+            card.change_colour(c.LIGHT_SIDEBAR, c.LIGHT_SIDEBAR_HOVER)
