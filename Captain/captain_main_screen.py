@@ -42,7 +42,7 @@ class Captain_Main_Screen(tk.Frame):
 
     #Method to open the manage fixtures screen
     def open_manage_fixtures(self):
-        pass
+        self.app.show_manage_fixtures_screen(self.user_id)
     
 
     #Method to open the all members screen

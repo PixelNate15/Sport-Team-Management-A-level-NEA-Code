@@ -132,7 +132,7 @@ class Captain_Show_All_Players_Available_For_Squad(tk.Frame):
             self.selected_players = []
         
         
-    #Method to return to the recent_results_screen
+    #Method to return to the captain main screen
     def return_to_main_screen(self):
         self.app.show_main_screen(self.user_id)
         

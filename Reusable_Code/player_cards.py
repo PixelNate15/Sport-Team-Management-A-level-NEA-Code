@@ -68,6 +68,7 @@ class player_cards(tk.Frame):
         #Include the widgets added after the rounded item was constructed.
         card.bind_children()
         
+        
     #Method to change the background of a card
     def change_colour(self, user_id, is_selected):
         card = self.cards.get(user_id)
