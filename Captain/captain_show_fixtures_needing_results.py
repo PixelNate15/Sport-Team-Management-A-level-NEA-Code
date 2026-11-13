@@ -32,7 +32,7 @@ class Captain_Show_Fixtures_Needing_Results(tk.Frame):
         
     #Method to open the add result screen
     def open_add_result(self, fixture):
-        self.app.show_add_result_screen(self.user_id, fixture)
+        self.app.show_add_or_edit_result_screen(self.user_id, True, fixture["fixture_id"])
         
         
     #Method to return to the manage fixtures screen

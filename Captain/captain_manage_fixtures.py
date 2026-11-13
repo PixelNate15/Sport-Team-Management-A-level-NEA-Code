@@ -115,8 +115,8 @@ class Captain_Manage_Fixtures(tk.Frame):
     
     
     #Method to expand a result card
-    def expand_result_card(self):
-        pass
+    def expand_result_card(self, fixture):
+        self.app.show_add_or_edit_result_screen(self.user_id, False, fixture["fixture_id"])
     
     
     #Method to select fixtures to remove

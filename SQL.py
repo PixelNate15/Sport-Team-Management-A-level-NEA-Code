@@ -1421,3 +1421,43 @@ def get_fixtures_without_results(user_id: int) -> list[dict]:
 
     except mysql.connector.Error as err:
         print(f"ERROR: SQL query failed: {err}")
+        
+        
+# Function to get a result using the fixture ID
+def get_result(fixture_id: int) -> dict | None:
+    try:
+        connection = connect_database()
+        cursor = connection.cursor()
+
+        sql = """
+            SELECT f.opponent_name, f.date, f.is_home, d.division_name, f.notes, GROUP_CONCAT(DISTINCT CONCAT(u.first_name, ' ', u.surname) ORDER BY u.surname, u.first_name SEPARATOR ', ') AS players_involved
+            FROM fixture f
+            LEFT JOIN division d ON d.division_id = f.division
+            LEFT JOIN `match` m ON m.fixture_id = f.fixture_id
+            LEFT JOIN match_players mp ON mp.match_id = m.match_id
+            LEFT JOIN user u ON u.user_id = mp.user_id
+            WHERE f.fixture_id = %s
+            GROUP BY f.fixture_id, f.opponent_name, f.date, f.is_home, d.division_name, f.notes
+        """
+
+        cursor.execute(sql, (fixture_id,))
+        row = cursor.fetchone()
+
+        cursor.close()
+        connection.close()
+
+        if row is None:
+            return None
+
+        return {
+            "opposition": row[0],
+            "date": row[1],
+            "home_away" : ("Home" if row[2] else "Away"),
+            "division": row[3],
+            "notes": row[4],
+            "players_involved": row[5].split(", ") if row[5] else []
+        }
+
+    except mysql.connector.Error as err:
+        print(f"ERROR: SQL query failed: {err}")
+        return None

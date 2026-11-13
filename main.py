@@ -21,6 +21,7 @@ from Captain.captain_show_all_players_available_for_squad import Captain_Show_Al
 from Captain.captain_manage_fixtures import Captain_Manage_Fixtures
 from Captain.captain_add_or_edit_fixture import Captain_Add_Or_Edit_Fixture
 from Captain.captain_show_fixtures_needing_results import Captain_Show_Fixtures_Needing_Results
+from Captain.captain_add_or_edit_result import Captain_Add_Or_Edit_Result
 
 
 class App (tk.Tk):
@@ -216,6 +217,15 @@ class App (tk.Tk):
         self.geometry("550x650")
         
         self.current_frame = Captain_Show_Fixtures_Needing_Results(self, self, user_id)
+        self.current_frame.pack(fill="both", expand="true")
+        
+        
+    #Method to show the add/edit fixture screen
+    def show_add_or_edit_result_screen(self, user_id, is_new, fixture_id):
+        self.clear_screen()
+        self.geometry("1200x1300")
+        
+        self.current_frame = Captain_Add_Or_Edit_Result(self, self, user_id, is_new, fixture_id)
         self.current_frame.pack(fill="both", expand="true")
         
 
