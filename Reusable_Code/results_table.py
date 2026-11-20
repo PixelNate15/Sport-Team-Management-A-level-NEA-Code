@@ -7,10 +7,8 @@ class Result_Table(tk.Frame):
     def __init__(self, parent, players):
         super().__init__(parent, bg=c.LIGHT_BACKGROUND, highlightbackground=c.LIGHT_BORDER, highlightcolor=c.LIGHT_BORDER, highlightthickness=2, bd=0)
 
-        players = players
         headings = ["#", "Players", "1 (Your Team)", "1 (Opponent)", "2 (Your Team)", "2 (Opponent)", "Champ tie\n(W / L / None)", "Total Sets"]
 
-        # Even grid columns hold content; odd columns are visible vertical lines.
         widths = [45, 250, 90, 90, 90, 90, 145, 105]
 
         for index, width in enumerate(widths):
@@ -18,7 +16,6 @@ class Result_Table(tk.Frame):
             if index < len(widths) - 1:
                 self.grid_columnconfigure(index * 2 + 1, minsize=2)
 
-        # Match the readonly player dropdowns in Add/Edit Fixture.
         self.style = ttk.Style(self)
         self.style.theme_use("clam")
 
@@ -32,7 +29,7 @@ class Result_Table(tk.Frame):
 
         self.scores = []
 
-        # Creates the header row
+        #Creates the header row
         for index, heading in enumerate(headings):
             self._cell(0, index, heading, header=True)
 
@@ -77,12 +74,11 @@ class Result_Table(tk.Frame):
             #Horizontal line below each match
             self._horizontal_line(grid_row + 1, thickness=2)
 
-
-        #Method to create full-height vertical dividing lines
+        #Creates full-height vertical dividing lines
         for divider in range(7):
             separator = tk.Frame(self, bg=c.LIGHT_BORDER, width=2)
-
             separator.grid(row=0, column=divider * 2 + 1, rowspan=10, sticky="ns")
+
 
     #Method to build the cells
     def _cell(self, row, column, text, header=False):
@@ -90,10 +86,14 @@ class Result_Table(tk.Frame):
         label.grid(row=row, column=column * 2, sticky="nsew")
         return label
 
+
+    #Method to build the horizontal dividing lines
     def _horizontal_line(self, row, thickness=2):
         self.grid_rowconfigure(row, minsize=thickness)
         tk.Frame(self, bg=c.LIGHT_BORDER, height=thickness).grid(row=row, column=0, columnspan=15, sticky="ew")
 
+
+    #Static method which updates the total set scores
     @staticmethod
     def _update_total(values, tie, result):
         home = away = 0
@@ -119,6 +119,8 @@ class Result_Table(tk.Frame):
 
         result.set(f"{home} - {away}")
 
+
+    #Method to return the scores
     def get_scores(self):
         return [
             {
@@ -132,3 +134,46 @@ class Result_Table(tk.Frame):
             }
             for i, row in enumerate(self.scores)
         ]
+        
+        
+#Function to turn one row from get_scores() into set/game totals
+def calculate_match_totals(row):
+    sets = [
+        (row["set_1_home"].strip(), row["set_1_away"].strip()),
+        (row["set_2_home"].strip(), row["set_2_away"].strip())
+    ]
+
+    sets_won = sets_lost = games_won = games_lost = 0
+
+    for set_number, (won, lost) in enumerate(sets, start=1):
+        if not (won.isdigit() and lost.isdigit()):
+            return None, f"Match {row['match']}: set {set_number} scores must both be whole numbers"
+        won = int(won)
+        lost = int(lost)
+
+        if won > 7 or lost > 7:
+            return None, f"Match {row['match']}: set {set_number} scores cannot be above 7"
+        if won == lost:
+            return None, f"Match {row['match']}: set {set_number} cannot be a draw"
+
+        #Games only ever come from the two set scores
+        games_won += won
+        games_lost += lost
+        if won > lost:
+            sets_won += 1
+        else:
+            sets_lost += 1
+
+    #The champ tie-break only changes the set totals, never the games
+    if row["champ_tie"] == "W":
+        sets_won += 1
+    elif row["champ_tie"] == "L":
+        sets_lost += 1
+
+    return {
+        "set_1_won": int(sets[0][0]), "set_1_lost": int(sets[0][1]),
+        "set_2_won": int(sets[1][0]), "set_2_lost": int(sets[1][1]),
+        "champ_tie": None if row["champ_tie"] == "None" else row["champ_tie"],
+        "sets_won": sets_won, "sets_lost": sets_lost,
+        "games_won": games_won, "games_lost": games_lost
+}, None

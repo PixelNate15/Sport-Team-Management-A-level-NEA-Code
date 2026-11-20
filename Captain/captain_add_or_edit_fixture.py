@@ -3,7 +3,7 @@ from Reusable_Code.main_screen_header_panel import Header_Panel
 from Reusable_Code.time_entry import Time_Entry
 from Reusable_Code.Rounded_Items.rounded_item import Rounded_Item
 from System.generate_recommended_team import generate_recommended_team
-from SQL import get_fixture_information, get_players_in_one_squad, get_players_for_fixture, insert_fixture, update_fixture
+from SQL import get_fixture_information, get_all_available_players, get_players_for_fixture, insert_fixture, update_fixture
 import tkinter as tk
 from tkinter import messagebox
 from tkinter import ttk
@@ -153,8 +153,11 @@ class Captain_Add_Or_Edit_Fixture(tk.Frame):
         self.option_add("*TCombobox*Listbox.selectForeground", "white")
         self.option_add("*TCombobox*Listbox.font", c.FONT_ENTRY)
         
-        #Gets all the players in the captains squad and creates a list of their names for the dropdowns
-        self.squad_players = get_players_in_one_squad(self.user_id)
+        #Gets all the players in the captains squad that are available and creates a list of their names for the dropdowns
+        if self.is_new:
+            self.squad_players = []
+        else:
+            self.squad_players = get_all_available_players(self.fixture_id)
         self.player_names = []
         for player in self.squad_players:
             self.player_names.append(f"{player['firstname']} {player['surname']}")
@@ -240,8 +243,7 @@ class Captain_Add_Or_Edit_Fixture(tk.Frame):
             #Insert captains team dropdowns
             if self.existing_players:
                 for i, existing_player in enumerate(self.existing_players[:4]):
-                    self.set_dropdown_player(self.cap_dropdowns[i], existing_player["user_id"])
-                    
+                    self.set_dropdown_player(self.cap_dropdowns[i], existing_player["user_id"])       
         
         
     #Method to turn a list of user_ids into the list of player dictionaries the SQL functions need
@@ -276,10 +278,17 @@ class Captain_Add_Or_Edit_Fixture(tk.Frame):
         chosen_ids = []
         for dropdown in self.cap_dropdowns:
             index = dropdown.current()
-            if index == -1:
-                messagebox.showinfo(message="Please select a player for every spot", title="Team Selection Error")
-                return None
-            chosen_ids.append(self.squad_players[index]["user_id"])
+            if index != -1:
+                chosen_ids.append(self.squad_players[index]["user_id"])
+        
+        #Saves the fixture without a selected team
+        if len(chosen_ids) == 0:
+            return []
+        
+        #Some but not all spots filled
+        if len(chosen_ids) != len(self.cap_dropdowns):
+            messagebox.showinfo(message="Please select a player for every spot or leave them all empty", title="Team Selection Error")
+            return None
         
         #Checks that the same player has not been picked more than once
         if len(set(chosen_ids)) != len(chosen_ids):
@@ -345,10 +354,10 @@ class Captain_Add_Or_Edit_Fixture(tk.Frame):
             messagebox.showinfo(message="Location is too long", title="Fixture Error")
             return
         
-        #Validation for opponent league position, it is optional so empty becomes None
+        #Opponent league position is optiononal so empty becomes None
         if self.league_position == "":
-            messagebox.showinfo(message="League position must entered", title="Fixture Error")
-        elif self.league_position.isdigit() and int(self.league_position) > 0:
+            self.league_position = None
+        if self.league_position.isdigit() and int(self.league_position) > 0:
             self.league_position = int(self.league_position)
         else:
             messagebox.showinfo(message="League position must be a whole number above 0", title="Fixture Error")

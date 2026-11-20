@@ -68,7 +68,6 @@ class Captain_Manage_Fixtures(tk.Frame):
         if self.results:
             self.result_cards = result_cards(self.results_scroll.content, self.results, self.expand_result_card, False)
         else:
-            #Display a message if there are no completed fixtures
             self.lbl_no_results = tk.Label(self.results_scroll.content, text="No results available", font=c.FONT_LABEL, fg=c.LIGHT_MAIN_TEXT, bg=c.LIGHT_BACKGROUND)
             self.lbl_no_results.pack(pady=20)
 

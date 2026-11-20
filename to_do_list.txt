@@ -1,5 +1,10 @@
 implement rounded buttons for the login/create account screen
 make frames scrollable
-change the form score algorithm so that the form of the p
 split SQL file into different files for different purposes
-feedback from P5
+remove player from squad
+easier to understand view of total score at bottom of add/edit result
+on show all players... make t hge filters show all players wiht that name
+fix the bug in the time entry
+validate the date in the add/edit fixture screen
+validate the set score in the result table
+confirmation before deleting fixtures

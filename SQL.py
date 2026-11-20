@@ -962,7 +962,7 @@ def get_last_ten_feedback_scores(user_id: int) -> list[dict]:
         print(f"ERROR: SQL query failed: {err}")
 
 
-#Function to get information aboubt all players from the captains squad ranking and below - requires user_id, club_id, squad_ranking
+#Function to get information aboubt all players from the captains squad ranking and below - requires user_id and club_id
 def get_all_players_for_squads_below_ranking(user_id: int, club_id: int) -> list[dict]:
     try:
         connection = connect_database()
@@ -1107,12 +1107,13 @@ def get_squad_results(captain_id: int) -> list[dict]:
         for row in SQL_results:
             sets_won = int(row[4])
             sets_lost = int(row[5])
+            did_win = True if sets_won > sets_lost else False
             results.append({
                 "fixture_id" : row[0],
                 "opposition" : row[1],
                 "date" : row[2].strftime("%d/%m/%Y"),
                 "home_away" : ("Home" if row[3] else "Away"),
-                "did_win" : sets_won > sets_lost,
+                "did_win" : did_win,
                 "sets_won" : sets_won,
                 "sets_lost" : sets_lost
             })
@@ -1135,9 +1136,7 @@ def get_squad_upcoming_fixtures(captain_id: int) -> list[dict]:
             SELECT f.fixture_id, f.opponent_name, f.date, f.is_home
             FROM fixture f
             JOIN season s ON s.season_id = f.season_id
-            WHERE f.squad_id = (SELECT squad_id FROM squad_players WHERE user_id = %s LIMIT 1)
-            AND s.is_current = 1
-            AND f.date >= CURDATE()
+            WHERE f.squad_id = (SELECT squad_id FROM squad_players WHERE user_id = %s LIMIT 1) AND s.is_current = 1 AND f.date >= CURDATE()
             ORDER BY f.date ASC, f.start_time ASC
         """
 
@@ -1206,7 +1205,12 @@ def get_fixture_information(fixture_id: int) -> dict:
 
 #Function to save the players for a fixture using an open cursor, requires fixture_id, players
 def save_team_selection_players(cursor, fixture_id: int, players: list[dict]) -> None:
-    cursor.execute("SELECT team_selection_id FROM team_selection WHERE fixture_id = %s", (fixture_id,))
+    cursor.execute("""
+        SELECT team_selection_id
+        FROM team_selection
+        WHERE fixture_id = %s
+    """, (fixture_id,))
+    
     existing = cursor.fetchone()
 
     if existing is not None:
@@ -1218,7 +1222,11 @@ def save_team_selection_players(cursor, fixture_id: int, players: list[dict]) ->
             WHERE team_selection_id = %s
         """, (date.today(), team_selection_id))
 
-        cursor.execute("DELETE FROM team_selection_players WHERE team_selection_id = %s", (team_selection_id,))
+        cursor.execute("""
+            DELETE FROM team_selection_players
+            WHERE team_selection_id = %s
+        """, (team_selection_id,))
+        
     else:
         cursor.execute("""
             INSERT INTO team_selection
@@ -1259,7 +1267,6 @@ def update_fixture(fixture_id: int, opponent_name: str, fixture_date: date, star
         if players is not None:
             save_team_selection_players(cursor, fixture_id, players)
 
-        #The fixture and the players are committed together
         connection.commit()
 
         cursor.close()
@@ -1283,8 +1290,7 @@ def insert_fixture(captain_id: int, opponent_name: str, fixture_date: date, star
 
         sql = """
             INSERT INTO fixture
-            (created_by_id, opponent_name, date, start_time, location, is_home, division,
-            opponent_league_position, notes, squad_id, season_id)
+            (created_by_id, opponent_name, date, start_time, location, is_home, division, opponent_league_position, notes, squad_id, season_id)
             SELECT %s, %s, %s, %s, %s, %s, sq.division_id, %s, %s, sq.squad_id, s.season_id
             FROM squad_players sp
             JOIN squad sq ON sq.squad_id = sp.squad_id
@@ -1304,7 +1310,6 @@ def insert_fixture(captain_id: int, opponent_name: str, fixture_date: date, star
         if new_fixture_id is not None and players is not None:
             save_team_selection_players(cursor, new_fixture_id, players)
 
-        #The fixture and the players are committed together
         connection.commit()
 
         cursor.close()
@@ -1375,7 +1380,7 @@ def remove_fixture(fixture_id: int) -> None:
             connection.close()
 
 
-#Function to get the fixtures which have been played but do not have any match results yet - requires user_id (the captain's)
+#Function to get the fixtures which have been played but do not have any match results yet - requires user_id
 def get_fixtures_without_results(user_id: int) -> list[dict]:
     try:
         connection = connect_database()
@@ -1423,14 +1428,14 @@ def get_fixtures_without_results(user_id: int) -> list[dict]:
         print(f"ERROR: SQL query failed: {err}")
         
         
-# Function to get a result using the fixture ID
+#Function to get a result - requires fixture_id
 def get_result(fixture_id: int) -> dict | None:
     try:
         connection = connect_database()
         cursor = connection.cursor()
 
         sql = """
-            SELECT f.opponent_name, f.date, f.is_home, d.division_name, f.notes, GROUP_CONCAT(DISTINCT CONCAT(u.first_name, ' ', u.surname) ORDER BY u.surname, u.first_name SEPARATOR ', ') AS players_involved
+            SELECT f.opponent_name, f.date, f.is_home, d.division_name, f.notes
             FROM fixture f
             LEFT JOIN division d ON d.division_id = f.division
             LEFT JOIN `match` m ON m.fixture_id = f.fixture_id
@@ -1441,23 +1446,132 @@ def get_result(fixture_id: int) -> dict | None:
         """
 
         cursor.execute(sql, (fixture_id,))
-        row = cursor.fetchone()
+        result = cursor.fetchone()
 
         cursor.close()
         connection.close()
 
-        if row is None:
-            return None
+        if result is not None:
+            return {
+                "opposition": result[0],
+                "date": result[1],
+                "home_away" : ("Home" if result[2] else "Away"),
+                "division": result[3],
+                "notes": result[4],
+            }
+        return None
 
-        return {
-            "opposition": row[0],
-            "date": row[1],
-            "home_away" : ("Home" if row[2] else "Away"),
-            "division": row[3],
-            "notes": row[4],
-            "players_involved": row[5].split(", ") if row[5] else []
-        }
-
+    except ConnectionError:
+        print("ERROR: Could not connect to database")
+    
     except mysql.connector.Error as err:
         print(f"ERROR: SQL query failed: {err}")
         return None
+    
+    
+#Function to get the saved matches for a fixture - requires fixture_id
+def get_matches_for_fixture(fixture_id: int) -> list[dict]:
+    try:
+        connection = connect_database()
+        cursor = connection.cursor()
+
+        sql = """
+            SELECT match_id, pair_number, set_1_won, set_1_lost, set_2_won, set_2_lost, champ_tie
+            FROM `match`
+            WHERE fixture_id = %s
+            ORDER BY match_id ASC
+        """
+
+        value = (fixture_id,)
+
+        cursor.execute(sql, value)
+        results = cursor.fetchall()
+
+        cursor.close()
+        connection.close()
+
+        matches = []
+        for row in results:
+            matches.append({
+                "match_id": row[0],
+                "pair_number": row[1],
+                "set_1_won": row[2],
+                "set_1_lost": row[3],
+                "set_2_won": row[4],
+                "set_2_lost": row[5],
+                "champ_tie": row[6]
+            })
+
+        return matches
+    except ConnectionError:
+        print("ERROR: Could not connect to database")
+
+    except mysql.connector.Error as err:
+        print(f"ERROR: SQL query failed: {err}")
+        
+        
+#Function to save the two players of one match using an open cursor - requires match_id and the match dict
+def save_match_players(cursor, match_id: int, match: dict) -> None:
+    #Any existing player rows are removed first so an edited match is never left with old players
+    cursor.execute("""
+        DELETE FROM match_players
+        WHERE match_id = %s
+    """, (match_id,))
+
+    sql = """
+        INSERT INTO match_players
+        (match_id, user_id, partner_user_id, partner_form_at_match)
+        VALUES (%s, %s, %s, %s)
+    """
+
+    #Each player's row stores their partner's form at the time of the match
+    cursor.execute(sql, (match_id, match["player_1"], match["player_2"], match["form_2"]))
+    cursor.execute(sql, (match_id, match["player_2"], match["player_1"], match["form_1"]))
+        
+        
+#Function to add or edit one match and its players - requires fixture_id, fixture date, a match dict, and a flag for if its new
+def save_match(fixture_id: int, fixture_date: date, match: dict, is_new: bool) -> bool:
+    connection = None
+    try:
+        connection = connect_database()
+        cursor = connection.cursor()
+
+        if is_new:
+            sql = """
+                INSERT INTO `match`
+                (pair_number, opponent_pair_number, date, did_win, sets_won, sets_lost, games_won, games_lost,
+                set_1_won, set_1_lost, set_2_won, set_2_lost, champ_tie, fixture_id)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            """
+        else:
+            sql = """
+                UPDATE `match`
+                SET pair_number = %s, opponent_pair_number = %s, date = %s, did_win = %s,
+                    sets_won = %s, sets_lost = %s, games_won = %s, games_lost = %s,
+                    set_1_won = %s, set_1_lost = %s, set_2_won = %s, set_2_lost = %s, champ_tie = %s
+                WHERE match_id = %s
+            """
+
+        #The last value is the fixture_id when inserting and the match_id when updating
+        values = (match["pair_number"], match["opponent_pair_number"], fixture_date, match["sets_won"] > match["sets_lost"], match["sets_won"], match["sets_lost"], match["games_won"], match["games_lost"], match["set_1_won"], match["set_1_lost"], match ["set_2_won"], match["set_2_lost"], match["champ_tie"], fixture_id if is_new else match["match_id"])
+
+        cursor.execute(sql, values)
+        match_id = cursor.lastrowid if is_new else match["match_id"]
+
+        save_match_players(cursor, match_id, match)
+
+        connection.commit()
+
+        cursor.close()
+        connection.close()
+        return True
+    except ConnectionError:
+        print("ERROR: Could not connect to database")
+        return False
+
+    except mysql.connector.Error as err:
+        print(f"ERROR: SQL query failed: {err}")
+        if connection is not None and connection.is_connected():
+            connection.rollback()
+            connection.close()
+        return False
