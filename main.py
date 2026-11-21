@@ -2,7 +2,7 @@ import tkinter as tk
 import constants as c
 from Reusable_Code.main_screen_header_panel import Header_Panel
 from Reusable_Code.scrollable_frame import Scrollable_Frame
-from SQL import check_is_captain
+from SQL.accounts import check_is_captain
 from login_screen import Login_Screen
 from create_account import Create_Account_Screen
 from Member.member_main_screen import Member_Main_Screen

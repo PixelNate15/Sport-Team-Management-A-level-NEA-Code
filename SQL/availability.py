@@ -1,4 +1,5 @@
 import mysql.connector
+from datetime import date
 from SQL.connection import connect_database
 
 #Functon to get the availiability of a fixture for a user which has already submitted their availability, requires user_id and fixture_id

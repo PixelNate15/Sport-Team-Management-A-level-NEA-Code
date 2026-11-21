@@ -1,6 +1,6 @@
 import constants as c
 from Reusable_Code.Rounded_Items.rounded_item import Rounded_Item
-from SQL import insert_account_details, check_for_duplicate_username
+from SQL.accounts import insert_account_details, check_for_duplicate_username
 import tkinter as tk
 from tkinter import messagebox
 from tkcalendar import DateEntry

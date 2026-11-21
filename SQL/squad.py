@@ -170,3 +170,42 @@ def add_player_to_squad(captain_id: int, player_id: int) -> None:
 
     except mysql.connector.Error as err:
         print(f"ERROR: SQL query failed: {err}")
+
+
+#Function to move a player down to the squad below their current squad - requires player_id
+def remove_player_from_squad(player_id: int) -> bool:
+    try:
+        connection = connect_database()
+        cursor = connection.cursor()
+
+        sql = """
+            UPDATE squad_players sp
+            JOIN squad current_squad ON current_squad.squad_id = sp.squad_id
+            JOIN squad lower_squad ON lower_squad.club_id = current_squad.club_id
+            SET sp.squad_id = lower_squad.squad_id
+            WHERE sp.user_id = %s
+            AND lower_squad.squad_ranking = (
+                SELECT MIN(s.squad_ranking)
+                FROM squad s
+                WHERE s.club_id = current_squad.club_id AND s.squad_ranking > current_squad.squad_ranking
+            )
+        """
+
+        value = (player_id,)
+
+        cursor.execute(sql, value)
+        connection.commit()
+
+        was_moved = cursor.rowcount > 0
+
+        cursor.close()
+        connection.close()
+
+        return was_moved
+    except ConnectionError:
+        print("ERROR: Could not connect to database")
+        return False
+
+    except mysql.connector.Error as err:
+        print(f"ERROR: SQL query failed: {err}")
+        return False

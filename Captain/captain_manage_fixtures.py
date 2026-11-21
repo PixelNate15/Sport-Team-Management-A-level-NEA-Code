@@ -3,7 +3,8 @@ from Reusable_Code.Rounded_Items.rounded_item import Rounded_Item
 from Reusable_Code.scrollable_frame import Scrollable_Frame
 from Reusable_Code.fixture_cards import fixture_cards
 from Reusable_Code.result_cards import result_cards
-from SQL import get_squad_upcoming_fixtures, get_squad_results, remove_fixture
+from SQL.fixtures import get_squad_upcoming_fixtures, remove_fixture
+from SQL.results import get_squad_results
 import tkinter as tk
 from tkinter import messagebox
 

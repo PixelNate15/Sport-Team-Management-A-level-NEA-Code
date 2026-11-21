@@ -4,12 +4,14 @@ from Reusable_Code.Rounded_Items.rounded_item import Rounded_Item
 
 
 class player_cards(tk.Frame):
-    def __init__(self, parent, players, on_click, want_grid=False, selected_ids=None):
+    def __init__(self, parent, players, on_click, want_grid=False, selected_ids=None, select_colour=c.LIGHT_SUCCESS, select_hover=c.LIGHT_SUCCESS_HOVER):
         super().__init__(parent, background=c.LIGHT_BACKGROUND)
         
         self.on_click = on_click
         self.want_grid = want_grid
         self.selected_ids = selected_ids if selected_ids is not None else []
+        self.select_colour = select_colour
+        self.select_hover = select_hover
         self.cards = {}
         
         if self.want_grid:
@@ -26,7 +28,7 @@ class player_cards(tk.Frame):
                 column = None
                 
             if player["user_id"] in self.selected_ids:
-                self.create_card_frame(player, c.LIGHT_SUCCESS, c.LIGHT_SUCCESS_HOVER, row, column)
+                self.create_card_frame(player, self.select_colour, self.select_hover, row, column)
             else:
                 self.create_card_frame(player, c.LIGHT_SIDEBAR, c.LIGHT_SIDEBAR_HOVER, row, column)
             
@@ -75,6 +77,6 @@ class player_cards(tk.Frame):
         if card is None:
             return
         if is_selected:
-            card.change_colour(c.LIGHT_SUCCESS, c.LIGHT_SUCCESS_HOVER)
+            card.change_colour(self.select_colour, self.select_hover)
         else:
             card.change_colour(c.LIGHT_SIDEBAR, c.LIGHT_SIDEBAR_HOVER)

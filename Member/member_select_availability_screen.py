@@ -1,6 +1,6 @@
 import constants as c
 from Reusable_Code.Rounded_Items.rounded_item import Rounded_Item
-from SQL import insert_availability_details, get_availability_details, update_availability_details
+from SQL.availability import insert_availability_details, get_availability_details, update_availability_details
 import tkinter as tk
 from tkinter import *
 from tkinter import messagebox

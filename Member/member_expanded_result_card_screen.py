@@ -2,7 +2,7 @@ import constants as c
 from Reusable_Code.view_result_information import View_Result_Details
 from Reusable_Code.Rounded_Items.rounded_item import Rounded_Item
 from Reusable_Code.feedback_cards import Feedback_Cards
-from SQL import get_partner_feedback_for_one_fixture
+from SQL.feedback import get_partner_feedback_for_one_fixture
 import tkinter as tk
 
 

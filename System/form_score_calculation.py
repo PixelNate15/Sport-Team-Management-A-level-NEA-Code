@@ -1,5 +1,5 @@
 import constants as c
-from SQL import get_match_history_last_three_years, count_fixtures_before_date
+from SQL.form_data import get_match_history_last_three_years, count_fixtures_before_date
 from datetime import date
 
 

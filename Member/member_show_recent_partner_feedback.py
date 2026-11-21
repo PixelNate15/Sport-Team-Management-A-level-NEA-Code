@@ -1,7 +1,7 @@
 import constants as c
 from Reusable_Code.Rounded_Items.rounded_item import Rounded_Item
 from Reusable_Code.feedback_cards import Feedback_Cards
-from SQL import get_recent_partner_feedback
+from SQL.feedback import get_recent_partner_feedback
 import tkinter as tk
 
 

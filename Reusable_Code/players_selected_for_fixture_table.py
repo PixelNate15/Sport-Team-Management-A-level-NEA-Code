@@ -1,6 +1,6 @@
 import constants as c
 from Reusable_Code.Rounded_Items.rounded_shapes import draw_rounded_rect
-from SQL import get_players_for_fixture
+from SQL.fixtures import get_players_for_fixture
 import tkinter as tk
 
 

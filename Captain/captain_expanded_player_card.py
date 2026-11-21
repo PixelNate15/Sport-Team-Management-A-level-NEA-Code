@@ -3,7 +3,7 @@ from Reusable_Code.draw_graph import draw_graph
 from Reusable_Code.view_player_information import View_Player_Details
 from Reusable_Code.Rounded_Items.rounded_item import Rounded_Item
 from System.form_score_calculation import calculate_form_score
-from SQL import get_last_ten_feedback_scores
+from SQL.feedback import get_last_ten_feedback_scores
 import tkinter as tk
 from datetime import date
 from dateutil.relativedelta import relativedelta

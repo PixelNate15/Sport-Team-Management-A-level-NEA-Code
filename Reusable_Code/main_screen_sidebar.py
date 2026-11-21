@@ -12,7 +12,9 @@ class main_screen_sidebar(tk.Frame):
         self.btn_frame = tk.Frame(self, bg=c.LIGHT_SIDEBAR)
         self.btn_frame.pack(expand=False)
         
+        self.btn_widgets = {}
         #Create buttons for all items inside the buttons tuple
         for text, command in buttons:
             btn = Rounded_Item(self.btn_frame, text=text, command=command, font=c.FONT_BUTTON, bg_colour=c.LIGHT_PRIMARY_ACCENT, hover_colour=c.LIGHT_ACCENT_HOVER, fg_colour="white", width=200, height=42, radius=16, parent_bg_colour=c.LIGHT_SIDEBAR)
             btn.pack(pady=15)
+            self.btn_widgets[text] = btn

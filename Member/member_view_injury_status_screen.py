@@ -1,7 +1,7 @@
 import constants as c
 from Reusable_Code.Rounded_Items.rounded_item import Rounded_Item
 from Reusable_Code.view_injury_information import View_Injury_Details
-from SQL import get_injury_info
+from SQL.injury import get_injury_info
 import tkinter as tk
 
 class Member_View_Injury_Status(tk.Frame):

@@ -1,7 +1,7 @@
 import constants as c
 from Reusable_Code.Rounded_Items.rounded_item import Rounded_Item
 from Reusable_Code.result_cards import result_cards
-from SQL import get_result_of_fixture_for_one_user
+from SQL.results import get_result_of_fixture_for_one_user
 import tkinter as tk
 
 

@@ -10,27 +10,30 @@ Run this file directly. It will:
 from datetime import date, timedelta
 from pprint import pprint
 
-import SQL
-from SQL import (
-    connect_database,
-    get_players_in_one_squad,
-    get_last_ten_feedback_scores,
-    get_club_id,
-    get_all_players_for_squads_below_ranking,
-    add_player_to_squad,
+from SQL.connection import connect_database
+from SQL.feedback import get_last_ten_feedback_scores
+from SQL.fixtures import (
     get_squad_upcoming_fixtures,
-    get_squad_results,
     remove_fixture,
     get_fixture_information,
     save_team_selection_players,
     insert_fixture,
     update_fixture,
     get_fixtures_without_results,
-    get_result,
     get_players_for_fixture,
+)
+from SQL.results import (
+    get_squad_results,
+    get_result,
     get_matches_for_fixture,
     save_match_players,
     save_match,
+)
+from SQL.squad import (
+    get_players_in_one_squad,
+    get_club_id,
+    get_all_players_for_squads_below_ranking,
+    add_player_to_squad,
 )
 
 TAG = "TSTSQL"                  # prefix on everything this file creates

@@ -1,7 +1,7 @@
 import constants as c
 from Reusable_Code.Rounded_Items.rounded_item import Rounded_Item
 from Reusable_Code.fixture_cards import fixture_cards
-from SQL import get_fixtures_without_results
+from SQL.fixtures import get_fixtures_without_results
 import tkinter as tk
 
 

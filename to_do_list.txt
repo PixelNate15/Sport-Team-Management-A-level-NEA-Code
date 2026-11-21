@@ -1,3 +1,0 @@
-remove player from squad
-easier to understand view of total score at bottom of add/edit result
-validate the date in the add/edit fixture screen

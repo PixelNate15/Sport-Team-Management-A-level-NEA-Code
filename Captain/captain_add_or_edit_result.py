@@ -3,7 +3,8 @@ from Reusable_Code.Rounded_Items.rounded_item import Rounded_Item
 from Reusable_Code.view_result_information_captain import View_Result_Details
 from Reusable_Code.results_table import Result_Table, calculate_match_totals
 from System.form_score_calculation import calculate_form_score
-from SQL import get_result, get_players_for_fixture, get_matches_for_fixture, save_match
+from SQL.fixtures import get_players_for_fixture
+from SQL.results import get_result, get_matches_for_fixture, save_match
 import tkinter as tk
 from tkinter import messagebox
 

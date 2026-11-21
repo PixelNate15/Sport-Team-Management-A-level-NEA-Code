@@ -2,12 +2,14 @@ import constants as c
 from Reusable_Code.time_entry import Time_Entry
 from Reusable_Code.Rounded_Items.rounded_item import Rounded_Item
 from System.generate_recommended_team import generate_recommended_team
-from SQL import get_fixture_information, get_all_available_players, get_players_for_fixture, insert_fixture, update_fixture
+from SQL.availability import get_all_available_players
+from SQL.fixtures import get_fixture_information, get_players_for_fixture, insert_fixture, update_fixture
 import tkinter as tk
 from tkinter import messagebox
 from tkinter import ttk
 from tkinter import *
 from tkcalendar import DateEntry
+from datetime import date
 
 class Captain_Add_Or_Edit_Fixture(tk.Frame):
     def __init__(self, parent, app, user_id, is_new, fixture_id=None):
@@ -337,6 +339,11 @@ class Captain_Add_Or_Edit_Fixture(tk.Frame):
             messagebox.showinfo(message="Opponent name is too long", title="Fixture Error")
             return
         
+        #Validation for the fixture date
+        if self.fixture_date <= date.today():
+            messagebox.showinfo(message="Fixtures need to be added for the future", title="Fixture Error")
+            return
+
         #Validation for start time
         if self.start_time is None:
             messagebox.showinfo(message="Please enter a valid start time", title="Fixture Error")

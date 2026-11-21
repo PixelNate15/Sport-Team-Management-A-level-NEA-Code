@@ -2,7 +2,7 @@ import constants as c
 from Reusable_Code.fixture_cards import fixture_cards
 from Reusable_Code.Rounded_Items.rounded_item import Rounded_Item
 import tkinter as tk
-from SQL import get_fixtures
+from SQL.fixtures import get_fixtures
 
 
 class Member_Availability_Screen(tk.Frame):

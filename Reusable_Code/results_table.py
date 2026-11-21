@@ -28,6 +28,7 @@ class Result_Table(tk.Frame):
         self.option_add("*TCombobox*Listbox.font", c.FONT_ENTRY)
 
         self.scores = []
+        self.match_totals = [(0, 0)] * 4
 
         #Creates the header row
         for index, heading in enumerate(headings):
@@ -64,15 +65,23 @@ class Result_Table(tk.Frame):
 
             #Automatically recalculate totals when scores change
             for var in row_vars:
-                var.trace_add("write", lambda *_args, values=row_vars, tie=tie_var, result=total_var: self._update_total(values, tie, result))
+                var.trace_add("write", lambda *_args, i=match_index, values=row_vars, tie=tie_var, result=total_var: self._update_total(i, values, tie, result))
 
-            tie_var.trace_add("write", lambda *_args, values=row_vars, tie=tie_var, result=total_var: self._update_total(values, tie, result))
+            tie_var.trace_add("write", lambda *_args, i=match_index, values=row_vars, tie=tie_var, result=total_var: self._update_total(i, values, tie, result))
 
             #Stores the variables for retrieving scores later
             self.scores.append({"sets": row_vars, "champ_tie": tie_var, "total_sets": total_var})
 
             #Horizontal line below each match
             self._horizontal_line(grid_row + 1, thickness=2)
+
+        #Creates the overall total row
+        self.lbl_total_text = tk.Label(self, text="Total =", font=c.FONT_LABEL_BOLD, fg=c.LIGHT_MAIN_TEXT, bg=c.LIGHT_BACKGROUND, anchor="e", padx=10, pady=14)
+        self.lbl_total_text.grid(row=10, column=12, columnspan=2, sticky="nsew")
+
+        self.overall_var = tk.StringVar(value="0 - 0")
+        self.lbl_overall = tk.Label(self, textvariable=self.overall_var, font=c.FONT_LABEL_BOLD, fg="black", bg=c.LIGHT_SIDEBAR, pady=14)
+        self.lbl_overall.grid(row=10, column=14, sticky="nsew")
 
         #Creates full-height vertical dividing lines
         for divider in range(7):
@@ -93,9 +102,8 @@ class Result_Table(tk.Frame):
         tk.Frame(self, bg=c.LIGHT_BORDER, height=thickness).grid(row=row, column=0, columnspan=15, sticky="ew")
 
 
-    #Static method which updates the total set scores
-    @staticmethod
-    def _update_total(values, tie, result):
+    #Method to update the total set scores
+    def _update_total(self, index, values, tie, result):
         home = away = 0
 
         for h, a in ((0, 1), (2, 3)):
@@ -118,6 +126,27 @@ class Result_Table(tk.Frame):
             away += 1
 
         result.set(f"{home} - {away}")
+        self.match_totals[index] = (home, away)
+        self._update_overall()
+
+
+    #Method to update the overall score and result colour
+    def _update_overall(self):
+        home = sum(total[0] for total in self.match_totals)
+        away = sum(total[1] for total in self.match_totals)
+        self.overall_var.set(f"{home} - {away}")
+
+        #Creates the background colour for the overall result
+        if home > away:
+            colour = c.LIGHT_SUCCESS
+
+        elif away > home:
+            colour = c.LIGHT_ERROR
+
+        else:
+            colour = c.LIGHT_SIDEBAR
+
+        self.lbl_overall.config(bg=colour)
 
 
     #Method to return the scores

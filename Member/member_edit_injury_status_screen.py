@@ -1,6 +1,6 @@
 import constants as c
 from Reusable_Code.Rounded_Items.rounded_item import Rounded_Item
-from SQL import remove_injury_status, update_injury_status, insert_injury_status
+from SQL.injury import remove_injury_status, update_injury_status, insert_injury_status
 import tkinter as tk
 from tkinter import *
 from tkcalendar import DateEntry

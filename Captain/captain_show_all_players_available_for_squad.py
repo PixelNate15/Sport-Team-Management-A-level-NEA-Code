@@ -1,7 +1,7 @@
 import constants as c
 from Reusable_Code.Rounded_Items.rounded_item import Rounded_Item
 from Reusable_Code.player_cards import player_cards
-from SQL import get_club_id, get_all_players_for_squads_below_ranking, add_player_to_squad
+from SQL.squad import get_club_id, get_all_players_for_squads_below_ranking, add_player_to_squad
 import tkinter as tk
 from tkinter import messagebox
 
@@ -101,7 +101,7 @@ class Captain_Show_All_Players_Available_For_Squad(tk.Frame):
         if self.screen_state == "analysis":
              self.player_frame = player_cards(self, players, self.expand_card, bool(want_grid))
         else:
-            self.player_frame = player_cards(self, players, self.select_player_cards, bool(want_grid), self.selected_players)
+            self.player_frame = player_cards(self, players, self.select_player_cards, bool(want_grid), self.selected_players, c.LIGHT_SUCCESS, c.LIGHT_SUCCESS_HOVER)
         self.player_frame.pack(fill="both", expand=True, after=self.filter_grid)
         self.app.scrollable_frame.bind_children()
             

@@ -1,7 +1,7 @@
 import tkinter as tk
 import constants as c
 from Reusable_Code.Rounded_Items.rounded_item import Rounded_Item
-from SQL import has_submitted_feedback
+from SQL.feedback import has_submitted_feedback
 
 
 #Class that can be imported to add a frame of cards for fixture results onto the screen

@@ -1,7 +1,7 @@
 import constants as c
 from Reusable_Code.main_screen_sidebar import main_screen_sidebar
 from Reusable_Code.fixture_cards import fixture_cards
-from SQL import get_fixtures
+from SQL.fixtures import get_fixtures
 import tkinter as tk
 
 

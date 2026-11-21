@@ -1,6 +1,7 @@
 import constants as c
 from System.form_score_calculation import calculate_form_score
-from SQL import get_all_available_players, count_partnership_matches
+from SQL.availability import get_all_available_players
+from SQL.form_data import count_partnership_matches
 
 
 #Main function that will return the pairings
