@@ -1,5 +1,4 @@
 import constants as c
-from Reusable_Code.main_screen_header_panel import Header_Panel
 from Reusable_Code.Rounded_Items.rounded_item import Rounded_Item
 from SQL import remove_injury_status, update_injury_status, insert_injury_status
 import tkinter as tk
@@ -14,10 +13,6 @@ class Member_Edit_Injury_Status(tk.Frame):
         self.app = app
         self.user_id = user_id
         self.injury = injury
-        
-        #Puts header on the screen
-        self.header = Header_Panel(self)
-        self.header.pack(side="top", fill="x")
         
         #Create title label
         self.lbl_title = tk.Label(self, text="Edit Injury Status", font=c.FONT_HEADING, fg=c.LIGHT_MAIN_TEXT, bg=c.LIGHT_BACKGROUND, justify="right")
@@ -55,6 +50,7 @@ class Member_Edit_Injury_Status(tk.Frame):
         self.btn_submit.pack(pady=15)
         self.btn_back = Rounded_Item(self, text="Back", command=self.return_to_view_injury_status, font=c.FONT_BUTTON, bg_colour=c.LIGHT_PRIMARY_ACCENT, hover_colour=c.LIGHT_ACCENT_HOVER, fg_colour="white", width=170, height=42, radius=16, parent_bg_colour=c.LIGHT_BACKGROUND)
         self.btn_back.pack(pady=15)
+        self.app.scrollable_frame.bind_children()
         
     
     #Method to clear the user of any injury

@@ -1,4 +1,5 @@
 import constants as c
+from Reusable_Code.Rounded_Items.rounded_item import Rounded_Item
 import tkinter as tk
 from tkinter import messagebox
 from SQL import check_password_hash, get_user_id
@@ -25,12 +26,13 @@ class Login_Screen(tk.Frame):
         self.ent_password = tk.Entry(self, font =c.FONT_ENTRY, bg=c.LIGHT_SIDEBAR, fg=c.LIGHT_PRIMARY_ACCENT, justify="center", show="*")
         self.ent_password.pack(pady=(0,15))
 
-        #Create login button and create new account button and put in frame
-        self.btn_login = tk.Button(self, text="Login", font=c.FONT_BUTTON, bg=c.LIGHT_PRIMARY_ACCENT, fg="white", activebackground=c.DARK_PRIMARY_ACCENT, activeforeground="white", command=self.login)
+        #Creates the login button and create new account buttons
+        self.btn_login = Rounded_Item(self, text="Login", command=self.login, font=c.FONT_BUTTON, bg_colour=c.LIGHT_PRIMARY_ACCENT, hover_colour=c.LIGHT_ACCENT_HOVER, fg_colour="white", width=170, height=42, radius=16, parent_bg_colour=c.LIGHT_BACKGROUND)
         self.btn_login.pack(pady=(0,20))
 
-        self.btn_create_account = tk.Button(self, text="Create Account", font=c.FONT_BUTTON, bg=c.LIGHT_PRIMARY_ACCENT, fg="white", activebackground=c.DARK_PRIMARY_ACCENT, activeforeground="white", command=self.create_account)
+        self.btn_create_account = Rounded_Item(self, text="Create Account", command=self.create_account, font=c.FONT_BUTTON, bg_colour=c.LIGHT_PRIMARY_ACCENT, hover_colour=c.LIGHT_ACCENT_HOVER, fg_colour="white", width=170, height=42, radius=16, parent_bg_colour=c.LIGHT_BACKGROUND)
         self.btn_create_account.pack()
+        self.app.scrollable_frame.bind_children()
 
 
     #Method to check login details are correct and if so log the user in

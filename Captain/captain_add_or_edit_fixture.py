@@ -1,5 +1,4 @@
 import constants as c
-from Reusable_Code.main_screen_header_panel import Header_Panel
 from Reusable_Code.time_entry import Time_Entry
 from Reusable_Code.Rounded_Items.rounded_item import Rounded_Item
 from System.generate_recommended_team import generate_recommended_team
@@ -17,10 +16,6 @@ class Captain_Add_Or_Edit_Fixture(tk.Frame):
         self.user_id = user_id
         self.is_new = is_new
         self.fixture_id = fixture_id
-        
-        #Puts header on the screen
-        self.header = Header_Panel(self)
-        self.header.pack(side="top", fill="x")
         
         #Puts the title on the screen
         self.title_text = "Add Fixture" if is_new else "Edit Fixture"
@@ -194,6 +189,7 @@ class Captain_Add_Or_Edit_Fixture(tk.Frame):
         #Put back button onto the screen
         self.btn_back = Rounded_Item(self, text="Back", command=self.return_to_manage_fixtures, font=c.FONT_BUTTON, bg_colour=c.LIGHT_PRIMARY_ACCENT, hover_colour=c.LIGHT_ACCENT_HOVER, fg_colour="white", width=170, height=42, radius=16, parent_bg_colour=c.LIGHT_BACKGROUND)
         self.btn_back.pack(pady=15)
+        self.app.scrollable_frame.bind_children()
         
         
     #Method to put text into a readonly entry

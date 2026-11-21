@@ -1,5 +1,4 @@
 import constants as c
-from Reusable_Code.main_screen_header_panel import Header_Panel
 from Reusable_Code.Rounded_Items.rounded_item import Rounded_Item
 from Reusable_Code.player_cards import player_cards
 from SQL import get_club_id, get_all_players_for_squads_below_ranking, add_player_to_squad
@@ -14,10 +13,6 @@ class Captain_Show_All_Players_Available_For_Squad(tk.Frame):
         self.user_id = user_id
         self.screen_state = "analysis"
         self.selected_players = []
-        
-        #Puts header on the screen
-        self.header = Header_Panel(self)
-        self.header.pack(side="top", fill="x")
         
         #Put title on the screen
         self.title = tk.Label(self, text="Players Available For Squad Choice", font=c.FONT_HEADING, fg=c.LIGHT_MAIN_TEXT, bg=c.LIGHT_BACKGROUND, justify="right")
@@ -50,25 +45,33 @@ class Captain_Show_All_Players_Available_For_Squad(tk.Frame):
         #Put back button onto the screen
         self.btn_back = Rounded_Item(self, text="Back", command=self.return_to_main_screen, font=c.FONT_BUTTON, bg_colour=c.LIGHT_PRIMARY_ACCENT, hover_colour=c.LIGHT_ACCENT_HOVER, fg_colour="white", width=170, height=42, radius=16, parent_bg_colour=c.LIGHT_BACKGROUND)
         self.btn_back.pack(pady=15)
+        self.app.scrollable_frame.bind_children()
         
     
     #Method to filter player cards
     def filter_player_cards(self):
         self.search = self.ent_search.get().strip().split()
+        self.player_list = []
         if len(self.search) == 1:
             for player in self.players:
                 if player["firstname"].lower() == self.search[0].lower() or player["surname"].lower() == self.search[0].lower():
-                    self.player_list = [player]
-                    self._draw(self.player_list)
-                    return
-            self.player_frame.destroy()
+                    self.player_list.append(player)
+            if self.player_list:
+                self._draw(self.player_list)
+                return
+            else:
+                self.player_frame.destroy()
+                return
         elif len(self.search) == 2:
             for player in self.players:
                 if player["firstname"].lower() == self.search[0].lower() and player["surname"].lower() == self.search[1].lower():
-                    self.player_list = [player]
-                    self._draw(self.player_list)
-                    return
-            self.player_frame.destroy()
+                    self.player_list.append(player)
+            if self.player_list:
+                self._draw(self.player_list)
+                return
+            else:
+                self.player_frame.destroy()
+                return
         elif len(self.search) == 0:
             self._draw(self.players, True)
         else:
@@ -100,6 +103,7 @@ class Captain_Show_All_Players_Available_For_Squad(tk.Frame):
         else:
             self.player_frame = player_cards(self, players, self.select_player_cards, bool(want_grid), self.selected_players)
         self.player_frame.pack(fill="both", expand=True, after=self.filter_grid)
+        self.app.scrollable_frame.bind_children()
             
     
     #Method to add the players to the captains squad
@@ -130,6 +134,8 @@ class Captain_Show_All_Players_Available_For_Squad(tk.Frame):
             self._draw(self.players, True)
             self.btn_submit.pack_forget()
             self.selected_players = []
+
+        self.app.scrollable_frame.bind_children()
         
         
     #Method to return to the captain main screen

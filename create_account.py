@@ -1,5 +1,5 @@
 import constants as c
-from Reusable_Code.reusable_buttons import add_hover
+from Reusable_Code.Rounded_Items.rounded_item import Rounded_Item
 from SQL import insert_account_details, check_for_duplicate_username
 import tkinter as tk
 from tkinter import messagebox
@@ -35,8 +35,7 @@ class Create_Account_Screen(tk.Frame):
         self.ent_dob.pack(pady=(0,10))
 
         #Create the generate username button
-        self.btn_generate_username = tk.Button(self, text="Generate Username", font=c.FONT_BUTTON, bg=c.LIGHT_PRIMARY_ACCENT, fg="white", activebackground=c.DARK_PRIMARY_ACCENT, activeforeground="white", command=self.generate_username)
-        add_hover(self.btn_generate_username, c.LIGHT_PRIMARY_ACCENT, c.LIGHT_ACCENT_HOVER)
+        self.btn_generate_username = Rounded_Item(self, text="Generate Username", command=self.generate_username, font=c.FONT_BUTTON, bg_colour=c.LIGHT_PRIMARY_ACCENT, hover_colour=c.LIGHT_ACCENT_HOVER, fg_colour="white", width=170, height=42, radius=16, parent_bg_colour=c.LIGHT_BACKGROUND)
         self.btn_generate_username.pack(pady=(0,10))
 
         #Creates the username label and entry and inserts the generated username into it
@@ -62,9 +61,9 @@ class Create_Account_Screen(tk.Frame):
         self.ent_password2.pack(pady=(0,15))
 
         #Create the create account button
-        self.btn_create_account = tk.Button(self, text="Create Account", font=c.FONT_BUTTON, bg=c.LIGHT_PRIMARY_ACCENT, fg="white", activebackground=c.DARK_PRIMARY_ACCENT, activeforeground="white", disabledforeground="white", command=self.create_account, state="disabled")
-        add_hover(self.btn_create_account, c.LIGHT_PRIMARY_ACCENT, c.LIGHT_ACCENT_HOVER)
+        self.btn_create_account = Rounded_Item(self, text="Create Account", command=self.create_account, font=c.FONT_BUTTON, bg_colour=c.LIGHT_PRIMARY_ACCENT, hover_colour=c.LIGHT_ACCENT_HOVER, fg_colour="white", width=170, height=42, radius=16, parent_bg_colour=c.LIGHT_BACKGROUND, state="disabled")
         self.btn_create_account.pack(pady=(0,10))
+        self.app.scrollable_frame.bind_children()
 
 
     #Method to generate a users username from their firstname and surname and date of birth
@@ -115,7 +114,7 @@ class Create_Account_Screen(tk.Frame):
                     self.ent_username.insert(0, self.username)
                     self.ent_username.config(state="readonly")
                     self.isUsernameGenerated = True
-                    self.btn_create_account.config(state="normal")
+                    self.btn_create_account.configure_button_state("normal")
                 else:
                     self.count += 1
                     self.username = self.base + str(self.count)  

@@ -1,5 +1,4 @@
 import constants as c
-from Reusable_Code.main_screen_header_panel import Header_Panel
 from Reusable_Code.Rounded_Items.rounded_item import Rounded_Item
 from Reusable_Code.scrollable_frame import Scrollable_Frame
 from Reusable_Code.fixture_cards import fixture_cards
@@ -15,10 +14,6 @@ class Captain_Manage_Fixtures(tk.Frame):
         self.user_id = user_id
         self.remove_fixture_selection = False
         self.selected_fixtures = []
-        
-        #Puts header on the screen
-        self.header = Header_Panel(self)
-        self.header.pack(side="top", fill="x")
         
         #Creates the main frame to hold both columns in
         self.main_frame = tk.Frame(self, bg=c.LIGHT_BACKGROUND)
@@ -48,10 +43,10 @@ class Captain_Manage_Fixtures(tk.Frame):
         self.bottom_divider.grid(row=2, column=0, columnspan=3, sticky="ew")
         
         #Creates the scrollable frames
-        self.upcoming_scroll = Scrollable_Frame(self.main_frame, width=540, height=200)
+        self.upcoming_scroll = Scrollable_Frame(self.main_frame, width=540, height=400)
         self.upcoming_scroll.grid(row=1, column=0, sticky="nsew", padx=5)
 
-        self.results_scroll = Scrollable_Frame(self.main_frame, width=540, height=200)
+        self.results_scroll = Scrollable_Frame(self.main_frame, width=540, height=400)
         self.results_scroll.grid(row=1, column=2, sticky="nsew", padx=5)
         
         #Gets the fixtures/results
@@ -71,10 +66,6 @@ class Captain_Manage_Fixtures(tk.Frame):
             self.lbl_no_results = tk.Label(self.results_scroll.content, text="No results available", font=c.FONT_LABEL, fg=c.LIGHT_MAIN_TEXT, bg=c.LIGHT_BACKGROUND)
             self.lbl_no_results.pack(pady=20)
 
-        #Bind mouse wheel scrolling after all cards have been created
-        self.upcoming_scroll.bind_children()
-        self.results_scroll.bind_children()
-        
         #Creates the button frame to hold all the buttons
         self.button_frame = tk.Frame(self, bg=c.LIGHT_BACKGROUND)
         self.button_frame.pack(padx=15, pady=10)
@@ -96,6 +87,9 @@ class Captain_Manage_Fixtures(tk.Frame):
         #Put back button onto the screen
         self.btn_back = Rounded_Item(self, text="Back", command=self.return_to_main_screen, font=c.FONT_BUTTON, bg_colour=c.LIGHT_PRIMARY_ACCENT, hover_colour=c.LIGHT_ACCENT_HOVER, fg_colour="white", width=170, height=42, radius=16, parent_bg_colour=c.LIGHT_BACKGROUND)
         self.btn_back.pack(pady=15)
+        self.app.scrollable_frame.bind_children()
+        self.upcoming_scroll.bind_children()
+        self.results_scroll.bind_children()
       
       
     #Method to return to the captain home screen
@@ -128,6 +122,9 @@ class Captain_Manage_Fixtures(tk.Frame):
             self.btn_submit.pack_forget()
         self.selected_fixtures = []
         self._draw_fixture_cards()
+        self.app.scrollable_frame.bind_children()
+        self.upcoming_scroll.bind_children()
+        self.results_scroll.bind_children()
         
         
     #Method to select a fixture
@@ -171,4 +168,4 @@ class Captain_Manage_Fixtures(tk.Frame):
     #Method to open the add new result screen
     def open_add_result_screen(self):
         self.app.show_fixtures_needing_results(self.user_id)
-            
+

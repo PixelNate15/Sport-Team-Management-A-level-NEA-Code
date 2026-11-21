@@ -1,5 +1,4 @@
 import constants as c
-from Reusable_Code.main_screen_header_panel import Header_Panel
 from Reusable_Code.draw_graph import draw_graph
 from Reusable_Code.view_player_information import View_Player_Details
 from Reusable_Code.Rounded_Items.rounded_item import Rounded_Item
@@ -16,10 +15,6 @@ class Captain_Expanded_Player_Card_Screen(tk.Frame):
         self.app = app
         self.user_id = user_id
         self.player = player
-        
-        #Puts header on the screen
-        self.header = Header_Panel(self)
-        self.header.pack(side="top", fill="x")
         
         #Put title on the screen
         self.title_sentence = f"{player["firstname"]} {player["surname"]}"
@@ -51,6 +46,7 @@ class Captain_Expanded_Player_Card_Screen(tk.Frame):
         #Put back button onto the screen
         self.btn_back = Rounded_Item(self, text="Back", command=self.return_to_main_screen, font=c.FONT_BUTTON, bg_colour=c.LIGHT_PRIMARY_ACCENT, hover_colour=c.LIGHT_ACCENT_HOVER, fg_colour="white", width=170, height=42, radius=16, parent_bg_colour=c.LIGHT_BACKGROUND)
         self.btn_back.pack(pady=15)
+        self.app.scrollable_frame.bind_children()
         
         
     #Method to return to the main screen

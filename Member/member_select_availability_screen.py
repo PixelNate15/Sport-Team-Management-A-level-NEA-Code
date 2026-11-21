@@ -1,5 +1,4 @@
 import constants as c
-from Reusable_Code.main_screen_header_panel import Header_Panel
 from Reusable_Code.Rounded_Items.rounded_item import Rounded_Item
 from SQL import insert_availability_details, get_availability_details, update_availability_details
 import tkinter as tk
@@ -13,10 +12,6 @@ class Member_Select_Availability_Screen(tk.Frame):
         self.user_id = user_id
         self.fixture = fixture
         self.filter = filter
-        
-        #Puts header on the screen
-        self.header = Header_Panel(self)
-        self.header.pack(side="top", fill="x")
         
         #Create the title for the page using a label
         self.title_string = f"{self.fixture['opposition']} ({self.fixture['home_away']}) - {self.fixture['date']}"
@@ -51,6 +46,7 @@ class Member_Select_Availability_Screen(tk.Frame):
         
         if self.available_value == 0:
             self.toggle_reason_field()
+        self.app.scrollable_frame.bind_children()
             
                 
     #Method to return to the availability screen

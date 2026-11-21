@@ -1,5 +1,4 @@
 import constants as c
-from Reusable_Code.main_screen_header_panel import Header_Panel
 from Reusable_Code.main_screen_sidebar import main_screen_sidebar
 from Reusable_Code.fixture_cards import fixture_cards
 from SQL import get_fixtures
@@ -11,10 +10,6 @@ class Member_Main_Screen(tk.Frame):
         super().__init__(parent, bg=c.LIGHT_BACKGROUND)
         self.app = app
         self.user_id = user_id
-        
-        #Puts header on the screen
-        self.header = Header_Panel(self)
-        self.header.pack(side="top", fill="x")
         
         #Create buttons for sidebar
         self.buttons = [
@@ -41,6 +36,7 @@ class Member_Main_Screen(tk.Frame):
         self.fixtures = get_fixtures(self.user_id)
         self.fixture_frame = fixture_cards(self, self.fixtures, True, self.expand_card)
         self.fixture_frame.pack()
+        self.app.scrollable_frame.bind_children()
         
        
     #Method to open the availability screen   

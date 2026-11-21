@@ -16,7 +16,21 @@ class Time_Entry(tk.Frame):
 
     #Method to return the time
     def get_time(self):
-        return f"{int(self.hours.get()):02d}:{int(self.minutes.get()):02d}"
+        hours = self.hours.get().strip()
+        minutes = self.minutes.get().strip()
+
+        #Both boxes must contain only integers
+        if not (hours.isdecimal() and minutes.isdecimal()):
+            return None
+
+        hours = int(hours)
+        minutes = int(minutes)
+
+        #Spinbox limits only apply to the arrow buttons, not typed values
+        if not ((0 <= hours <= 23) and (0 <= minutes <= 59)):
+            return None
+
+        return f"{hours:02d}:{minutes:02d}"
 
 
     #Method to set the time
@@ -28,5 +42,3 @@ class Time_Entry(tk.Frame):
 
         self.minutes.delete(0, tk.END)
         self.minutes.insert(0, minutes)
-        
-        

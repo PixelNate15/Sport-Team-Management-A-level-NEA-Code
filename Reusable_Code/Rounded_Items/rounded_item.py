@@ -3,7 +3,7 @@ from Reusable_Code.Rounded_Items.rounded_shapes import draw_rounded_rect
 
 
 class Rounded_Item(tk.Frame):
-    def __init__(self, parent, bg_colour, hover_colour, parent_bg_colour, text=None, command=None, font=None, fg_colour="white", width=170, height=42, radius=16):
+    def __init__(self, parent, bg_colour, hover_colour, parent_bg_colour, text=None, command=None, font=None, fg_colour="white", width=170, height=42, radius=16, state="normal"):
         super().__init__(parent, bg=parent_bg_colour)
 
         self.width = width
@@ -12,6 +12,7 @@ class Rounded_Item(tk.Frame):
         self.bg_colour = bg_colour
         self.hover_colour = bg_colour if hover_colour is None else hover_colour
         self.command = command
+        self.state = state
 
         self.canvas = tk.Canvas(self, width=width, height=height, bg=parent_bg_colour, highlightthickness=0)
         self.canvas.pack()
@@ -61,14 +62,26 @@ class Rounded_Item(tk.Frame):
         #Function that actually binds the action to the button/card
         def bind(widget):
             if self.command is not None:
-                widget.bind("<Button-1>", lambda e: self.command())
-            widget.bind("<Enter>", lambda e: self.set_colour(self.hover_colour))
+                widget.bind("<Button-1>", lambda e: self.run_command())
+            widget.bind("<Enter>", lambda e: self.set_colour(self.hover_colour if self.state == "normal" else self.bg_colour))
             widget.bind("<Leave>", lambda e: self.set_colour(self.bg_colour))
 
             for child in widget.winfo_children():
                 bind(child)
 
         bind(self)
+
+
+    #Method to run the buttons command if the button is enabled
+    def run_command(self):
+        if self.state == "normal" and self.command is not None:
+            self.command()
+
+
+    #Method to change whether a button is enabled or disabled
+    def configure_button_state(self, new_state):
+        self.state = new_state
+        self.set_colour(self.bg_colour)
         
     
     #Method to change the text of a button

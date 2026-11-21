@@ -1,5 +1,4 @@
 import constants as c
-from Reusable_Code.main_screen_header_panel import Header_Panel
 from Reusable_Code.Rounded_Items.rounded_item import Rounded_Item
 from Reusable_Code.view_result_information_captain import View_Result_Details
 from Reusable_Code.results_table import Result_Table, calculate_match_totals
@@ -16,10 +15,6 @@ class Captain_Add_Or_Edit_Result(tk.Frame):
         self.user_id = user_id
         self.is_new = is_new
         self.fixture_id = fixture_id
-        
-        #Puts header on the screen
-        self.header = Header_Panel(self)
-        self.header.pack(side="top", fill="x")
         
         #Puts the title on the screen
         self.title_text = "Add Result" if is_new else "Edit Result"
@@ -63,6 +58,7 @@ class Captain_Add_Or_Edit_Result(tk.Frame):
         #Put back button onto the screen
         self.btn_back = Rounded_Item(self, text="Back", command=self.return_to_previous_screen, font=c.FONT_BUTTON, bg_colour=c.LIGHT_PRIMARY_ACCENT, hover_colour=c.LIGHT_ACCENT_HOVER, fg_colour="white", width=170, height=42, radius=16, parent_bg_colour=c.LIGHT_BACKGROUND)
         self.btn_back.pack(pady=15)
+        self.app.scrollable_frame.bind_children()
         
         
     #Method to make the four matches from the team selected for the fixture

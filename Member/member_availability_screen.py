@@ -1,5 +1,4 @@
 import constants as c
-from Reusable_Code.main_screen_header_panel import Header_Panel
 from Reusable_Code.fixture_cards import fixture_cards
 from Reusable_Code.Rounded_Items.rounded_item import Rounded_Item
 import tkinter as tk
@@ -11,10 +10,6 @@ class Member_Availability_Screen(tk.Frame):
         super().__init__(parent, bg=c.LIGHT_BACKGROUND)
         self.app = app
         self.user_id = user_id
-        
-        #Puts header on the screen
-        self.header = Header_Panel(self)
-        self.header.pack(side="top", fill="x")
         
         #Create the title for the page using a label
         self.lbl_Title = tk.Label(self, text="Availability", font=c.FONT_HEADING, fg=c.LIGHT_MAIN_TEXT, bg=c.LIGHT_BACKGROUND, justify="left")
@@ -33,6 +28,7 @@ class Member_Availability_Screen(tk.Frame):
         #Add button to bottom of screen
         self.btn_back = Rounded_Item(self, text="Back", command=self.return_to_main_screen, font=c.FONT_BUTTON, bg_colour=c.LIGHT_PRIMARY_ACCENT, hover_colour=c.LIGHT_ACCENT_HOVER, fg_colour="white", width=170, height=42, radius=16, parent_bg_colour=c.LIGHT_BACKGROUND)
         self.btn_back.pack(pady=15)
+        self.app.scrollable_frame.bind_children()
         
     
     #Method to open the select availbility screen
@@ -58,4 +54,5 @@ class Member_Availability_Screen(tk.Frame):
         self.fixtures = get_fixtures(self.user_id, self.filter)
         self.fixture_frame = fixture_cards(self, self.fixtures, False, self.open_select_availbility)
         self.fixture_frame.pack(before=self.btn_filter)
+        self.app.scrollable_frame.bind_children()
         

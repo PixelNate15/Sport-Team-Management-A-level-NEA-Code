@@ -1,5 +1,4 @@
 import constants as c
-from Reusable_Code.main_screen_header_panel import Header_Panel
 from Reusable_Code.main_screen_sidebar import main_screen_sidebar
 from Reusable_Code.player_cards import player_cards
 from SQL import get_players_in_one_squad
@@ -10,10 +9,6 @@ class Captain_Main_Screen(tk.Frame):
         super().__init__(parent, bg=c.LIGHT_BACKGROUND)
         self.app = app
         self.user_id = user_id
-        
-        #Puts header on the screen
-        self.header = Header_Panel(self)
-        self.header.pack(side="top", fill="x")
         
         #Create buttons for sidebar
         self.buttons = [
@@ -33,6 +28,7 @@ class Captain_Main_Screen(tk.Frame):
         self.players = get_players_in_one_squad(self.user_id)
         self.player_frame = player_cards(self, self.players, self.expand_card)
         self.player_frame.pack()
+        self.app.scrollable_frame.bind_children()
         
           
     #Method to expand fixture card to view more details

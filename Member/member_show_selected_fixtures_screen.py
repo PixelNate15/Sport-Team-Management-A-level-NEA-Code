@@ -1,5 +1,4 @@
 import constants as c
-from Reusable_Code.main_screen_header_panel import Header_Panel
 from Reusable_Code.Rounded_Items.rounded_item import Rounded_Item
 from Reusable_Code.fixture_cards import fixture_cards
 import tkinter as tk
@@ -11,10 +10,6 @@ class Member_Show_Selected_Fixtures_Screen(tk.Frame):
         self.app = app
         self.user_id = user_id
         self.fixtures = fixtures
-        
-        #Puts header on the screen
-        self.header = Header_Panel(self)
-        self.header.pack(side="top", fill="x")
         
         #Create label for fixtures
         self.lbl_fixtures = tk.Label(self, text="Selected Fixtures", font=c.FONT_HEADING, fg=c.LIGHT_MAIN_TEXT, bg=c.LIGHT_BACKGROUND, justify="right")
@@ -29,6 +24,7 @@ class Member_Show_Selected_Fixtures_Screen(tk.Frame):
         #Put back button onto the screen
         self.btn_back = Rounded_Item(self, text="Back", command=self.return_to_main_screen, font=c.FONT_BUTTON, bg_colour=c.LIGHT_PRIMARY_ACCENT, hover_colour=c.LIGHT_ACCENT_HOVER, fg_colour="white", width=170, height=42, radius=16, parent_bg_colour=c.LIGHT_BACKGROUND)
         self.btn_back.pack(pady=15)
+        self.app.scrollable_frame.bind_children()
         
     
     #Method to expand fixture card to view more details
