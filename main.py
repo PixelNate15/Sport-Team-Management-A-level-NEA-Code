@@ -37,7 +37,7 @@ class App (tk.Tk):
         self.scrollable_frame = None
         self.header = None
         self.current_view = None
-        self.show_main_screen(1)
+        self.show_main_screen(3)
         
         
     #Method to clear the screen of the current frame

@@ -1,7 +1,14 @@
 import mysql.connector
 from home_ip import getHomeIP
 
+CLUB_COLUMNS = []
+CLUB_DATA = []
 
+DIVISION_COLUMNS = []
+DIVISION_DATA = []
+
+SEASON_COLUMNS = []
+SEASON_DATA = []
 
 USER_COLUMNS = []
 USER_DATA = []
@@ -15,20 +22,17 @@ FIXTURE_DATA = []
 AVAILABILITY_COLUMNS = []
 AVAILABILITY_DATA = []
 
-FORM_COLUMNS = []
-FORM_DATA = []
-
 INJURY_COLUMNS = []
 INJURY_DATA = []
 
 MATCH_COLUMNS = []
 MATCH_DATA = []
 
-MATCH_PLAYER_COLUMNS = []
-MATCH_PLAYER_DATA = []
+MATCH_PLAYERS_COLUMNS = []
+MATCH_PLAYERS_DATA = []
 
-FEEDBACK_COLUMNS = []
-FEEDBACK_DATA = []
+PARTNER_FEEDBACK_COLUMNS = []
+PARTNER_FEEDBACK_DATA = []
 
 SETTINGS_COLUMNS = []
 SETTINGS_DATA = []
@@ -67,15 +71,17 @@ def connect_database():
 
 #The tables are placed in order for insertion, since the first table inserted shouldn't have any foreign keys
 TABLES = {
+    "club": (CLUB_COLUMNS, CLUB_DATA),
+    "division": (DIVISION_COLUMNS, DIVISION_DATA),
+    "season": (SEASON_COLUMNS, SEASON_DATA),
     "user": (USER_COLUMNS, USER_DATA),
     "squad": (SQUAD_COLUMNS, SQUAD_DATA),
     "fixture": (FIXTURE_COLUMNS, FIXTURE_DATA),
     "availability": (AVAILABILITY_COLUMNS, AVAILABILITY_DATA),
-    "form": (FORM_COLUMNS, FORM_DATA),
     "injury": (INJURY_COLUMNS, INJURY_DATA),
     "match": (MATCH_COLUMNS, MATCH_DATA),
-    "match_player": (MATCH_PLAYER_COLUMNS, MATCH_PLAYER_DATA),
-    "feedback": (FEEDBACK_COLUMNS, FEEDBACK_DATA),
+    "match_players": (MATCH_PLAYERS_COLUMNS, MATCH_PLAYERS_DATA),
+    "partner_feedback": (PARTNER_FEEDBACK_COLUMNS, PARTNER_FEEDBACK_DATA),
     "settings": (SETTINGS_COLUMNS, SETTINGS_DATA),
     "squad_players": (SQUAD_PLAYERS_COLUMNS, SQUAD_PLAYERS_DATA),
     "team_selection": (TEAM_SELECTION_COLUMNS, TEAM_SELECTION_DATA),
